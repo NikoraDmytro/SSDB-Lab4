@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDB-Lab4.Domain", "SSDB-La
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDB-Lab4.Abstractions", "SSDB-Lab4.Abstractions\SSDB-Lab4.Abstractions.csproj", "{911417FF-49F0-4028-AF77-F52EE81DB92F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSDB-Lab4.Common", "SSDB-Lab4.Common\SSDB-Lab4.Common.csproj", "{8FD9E06B-8AD9-47D0-A24A-A6D80C215BDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{911417FF-49F0-4028-AF77-F52EE81DB92F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{911417FF-49F0-4028-AF77-F52EE81DB92F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{911417FF-49F0-4028-AF77-F52EE81DB92F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD9E06B-8AD9-47D0-A24A-A6D80C215BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD9E06B-8AD9-47D0-A24A-A6D80C215BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD9E06B-8AD9-47D0-A24A-A6D80C215BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD9E06B-8AD9-47D0-A24A-A6D80C215BDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

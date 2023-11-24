@@ -1,10 +1,6 @@
-namespace SSDB_Lab4.Domain.entities;
+using SSDB_Lab4.Common;
 
-public enum Sex
-{
-    M,
-    F
-}
+namespace SSDB_Lab4.Domain.entities;
 
 public class Sportsman: BaseEntity
 {

@@ -16,6 +16,9 @@ public class AppDbContext: DbContext
     }
 
     private DbSet<Sportsman>? Sportsmen { get; set; }
+    private DbSet<Competition>? Competitions { get; set; }
+    private DbSet<Division>? Divisions { get; set; }
+    private DbSet<Competitor>? Competitors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

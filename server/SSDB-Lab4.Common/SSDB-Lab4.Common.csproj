@@ -2,13 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>SSDB_Lab4.Domain</RootNamespace>
+        <RootNamespace>SSDB_Lab4.Common</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SSDB-Lab4.Common\SSDB-Lab4.Common.csproj" />
-    </ItemGroup>
 
 </Project>
