@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SSDB-Lab4.Application\SSDB-Lab4.Application.csproj" />
       <ProjectReference Include="..\SSDB-Lab4.Persistence\SSDB-Lab4.Persistence.csproj" />
     </ItemGroup>
 

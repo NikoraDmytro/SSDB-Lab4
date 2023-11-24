@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SSDB_Lab4.Abstractions.Persistence;
+using SSDB_Lab4.Persistence.Repositories;
 
 namespace SSDB_Lab4.Persistence;
 
@@ -30,6 +31,7 @@ public static class DependencyRegistrar
     
     private static void ConfigureRepositories(this IServiceCollection services)
     {
+        services.AddScoped<ISportsmanRepository, SportsmanRepository>();
     }
     
     private static void ConfigureUnitOfWork(this IServiceCollection services)

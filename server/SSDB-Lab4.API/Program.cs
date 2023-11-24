@@ -1,3 +1,4 @@
+using SSDB_Lab4.Application;
 using SSDB_Lab4.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureApplicationLayerDependencies();
 builder.Services.ConfigurePersistenceLayerDependencies(builder.Configuration);
 
 var app = builder.Build();
