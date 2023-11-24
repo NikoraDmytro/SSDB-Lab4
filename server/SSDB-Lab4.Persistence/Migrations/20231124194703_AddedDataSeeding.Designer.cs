@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SSDB_Lab4.Persistence;
 
@@ -11,9 +12,11 @@ using SSDB_Lab4.Persistence;
 namespace SSDB_Lab4.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231124194703_AddedDataSeeding")]
+    partial class AddedDataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,8 +378,6 @@ namespace SSDB_Lab4.Persistence.Migrations
                     b.ToTable("divisions", null, t =>
                         {
                             t.HasCheckConstraint("CHK_divisions_sex", "sex IN ('M', 'F')");
-
-                            t.HasCheckConstraint("CHK_divisions_weight", "min_weight IS NOT NULL OR  max_weight IS NOT NULL");
                         });
 
                     b.HasData(

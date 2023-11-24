@@ -4,7 +4,7 @@ public class Competitor: BaseEntity
 {
     public int SportsmanId { get; set; }
     public int CompetitionId { get; set; }
-    public float? WeightingResult { get; set; }
+    public double? WeightingResult { get; set; }
     public int? DivisionId { get; set; }
     public int LapNum { get; set; }
     

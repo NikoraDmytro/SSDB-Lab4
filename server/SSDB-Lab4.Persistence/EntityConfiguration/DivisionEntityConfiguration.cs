@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SSDB_Lab4.Common;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Persistence.EntityConfiguration;
@@ -55,5 +56,62 @@ public class DivisionEntityConfiguration
             .HasColumnType("varchar(1)")
             .HasConversion<string>()
             .IsRequired();
+
+        builder.HasData(
+            new Division {
+                Id = 1,
+                Name = "Дівчата 11-13 років -35кг",
+                MinWeight = 30.0, 
+                MaxWeight = 35.0, 
+                MinAge = 11, 
+                MaxAge = 13, 
+                Sex = Sex.F
+            },
+            new Division {
+                Id = 2,
+                Name = "Юніори 14-15 років -45кг",
+                MinWeight = null, 
+                MaxWeight = 45.0, 
+                MinAge = 14, 
+                MaxAge = 15, 
+                Sex = Sex.M
+            },
+            new Division {
+                Id = 3,
+                Name = "Юніори 14-15 років -50кг",
+                MinWeight = 45.0, 
+                MaxWeight = 50.0, 
+                MinAge = 14, 
+                MaxAge = 15, 
+                Sex = Sex.M
+            },
+            new Division {
+                Id = 4,
+                Name = "Юніори 16-17 років -57кг",
+                MinWeight = 51.0, 
+                MaxWeight = 57.0, 
+                MinAge = 16, 
+                MaxAge = 17, 
+                Sex = Sex.M
+            },
+            new Division {
+                Id = 5,
+                Name = "Жінки 18-39 років -62кг",
+                MinWeight = 57.0, 
+                MaxWeight = 62.0, 
+                MinAge = 18, 
+                MaxAge = 39, 
+                Sex = Sex.F
+            },
+            new Division {
+                Id = 6,
+                Name = "Чоловіки 18-39 років -64кг",
+                MinWeight = 58.0, 
+                MaxWeight = 64.0, 
+                MinAge = 18, 
+                MaxAge = 39, 
+                Sex = Sex.M
+            }
+        );
     }
 }
