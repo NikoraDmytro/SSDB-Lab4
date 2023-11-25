@@ -6,6 +6,13 @@ namespace SSDB_Lab4.Common.Attributes;
                 | AttributeTargets.Field)]
 public class ValidDateAttribute: ValidationAttribute
 {
+    private readonly bool _onlyPast;
+    
+    public ValidDateAttribute(bool onlyPast = true)
+    {
+        _onlyPast = onlyPast;
+    }
+    
     public override bool IsValid(object? value)
     {
         if (!DateTime.TryParse(
@@ -15,6 +22,11 @@ public class ValidDateAttribute: ValidationAttribute
             return false;
         }
 
-        return dateValue <= DateTime.Now;
+        if (_onlyPast)
+        {
+            return dateValue <= DateTime.Now;
+        }
+
+        return true;
     }
 }
