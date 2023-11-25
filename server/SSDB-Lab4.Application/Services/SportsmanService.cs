@@ -1,7 +1,9 @@
 using AutoMapper;
 using SSDB_Lab4.Abstractions.Application;
 using SSDB_Lab4.Abstractions.Persistence;
+using SSDB_Lab4.Common;
 using SSDB_Lab4.Common.DTOs.Sportsman;
+using SSDB_Lab4.Common.Exceptions;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Application.Services;
@@ -38,7 +40,7 @@ public class SportsmanService: ISportsmanService
 
         if (sportsman is null)
         {
-            throw new Exception($"Sportsman was not found!");
+            throw new NotFoundException($"Sportsman was not found!");
         }
 
         var sportsmanDto = _mapper.Map<SportsmanDto>(sportsman);
@@ -66,13 +68,13 @@ public class SportsmanService: ISportsmanService
 
         if (sportsman is null)
         {
-            throw new Exception($"Sportsman was not found!");
+            throw new NotFoundException($"Sportsman was not found!");
         }
 
         sportsman.FirstName = updateSportsmanDto.FirstName;
         sportsman.LastName = updateSportsmanDto.LastName;
-        sportsman.BirthDate = updateSportsmanDto.BirthDate;
-        sportsman.Sex = updateSportsmanDto.Sex;
+        sportsman.BirthDate = DateTime.Parse(updateSportsmanDto.BirthDate!);
+        sportsman.Sex = Enum.Parse<Sex>(updateSportsmanDto.Sex!);
         
         
         _unitOfWork.SportsmanRepository.Update(sportsman);
@@ -87,7 +89,7 @@ public class SportsmanService: ISportsmanService
 
         if (sportsman is null)
         {
-            throw new Exception($"Sportsman was not found!");
+            throw new NotFoundException($"Sportsman was not found!");
         }
         
         _unitOfWork.SportsmanRepository.Delete(sportsman);

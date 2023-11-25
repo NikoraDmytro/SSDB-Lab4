@@ -36,11 +36,15 @@ public class SportsmanEntityConfiguration
         builder
             .Property(s => s.FirstName)
             .HasColumnName("first_name")
+            .HasColumnType("varchar(60)")
+            .HasMaxLength(60)
             .IsRequired();
 
         builder
             .Property(s => s.LastName)
             .HasColumnName("last_name")
+            .HasColumnType("varchar(60)")
+            .HasMaxLength(60)
             .IsRequired();
 
         builder.HasData(

@@ -28,6 +28,13 @@ public class DivisionEntityConfiguration
         builder
             .HasIndex(d => d.Name)
             .IsUnique();
+
+        builder
+            .Property(d => d.Name)
+            .HasColumnName("name")
+            .HasColumnType("varchar(50)")
+            .HasMaxLength(50)
+            .IsRequired();
         
         builder
             .Property(d => d.MinWeight)
