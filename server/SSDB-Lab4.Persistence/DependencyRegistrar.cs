@@ -32,6 +32,9 @@ public static class DependencyRegistrar
     private static void ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<ISportsmanRepository, SportsmanRepository>();
+        services.AddScoped<ICompetitionRepository, CompetitionRepository>();
+        services.AddScoped<IDivisionRepository, DivisionRepository>();
+        services.AddScoped<ICompetitorRepository, CompetitorRepository>();
     }
     
     private static void ConfigureUnitOfWork(this IServiceCollection services)

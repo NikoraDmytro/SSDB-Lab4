@@ -9,6 +9,9 @@ public class UnitOfWork: IUnitOfWork
     private readonly AppDbContext _context;
 
     private ISportsmanRepository? _sportsmanRepository;
+    private ICompetitionRepository? _competitionRepository;
+    private IDivisionRepository? _divisionRepository;
+    private ICompetitorRepository? _competitorRepository;
     
     public UnitOfWork(AppDbContext context)
     {
@@ -17,7 +20,16 @@ public class UnitOfWork: IUnitOfWork
 
     public ISportsmanRepository SportsmanRepository =>
         _sportsmanRepository ??= new SportsmanRepository(_context);
-    
+
+    public ICompetitionRepository CompetitionRepository =>
+        _competitionRepository ??= new CompetitionRepository(_context);
+
+    public IDivisionRepository DivisionRepository =>
+        _divisionRepository ??= new DivisionRepository(_context);
+
+    public ICompetitorRepository CompetitorRepository =>
+        _competitorRepository ??= new CompetitorRepository(_context);
+
     public Task<int> SaveAsync()
     {
         return _context.SaveChangesAsync();

@@ -17,6 +17,9 @@ public static class DependencyRegistrar
     private static void ConfigureServices(this IServiceCollection services){
     {
         services.AddScoped<ISportsmanService, SportsmanService>();
+        services.AddScoped<ICompetitionService, CompetitionService>();
+        services.AddScoped<IDivisionService, DivisionService>();
+        services.AddScoped<ICompetitorService, CompetitorService>();
     }}
     
     private static void ConfigureAutomapper(this IServiceCollection services)
