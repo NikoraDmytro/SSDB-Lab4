@@ -4,5 +4,5 @@ namespace SSDB_Lab4.Abstractions.Persistence;
 
 public interface IDivisionRepository: IGenericRepository<Division>
 {
-    
+    Task<Division?> GetByNameAsync(String name);
 }
