@@ -8,33 +8,27 @@ using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Application.Services;
 
-public class SportsmanService: ISportsmanService
+public class SportsmanService: BaseService, ISportsmanService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    
-    public SportsmanService(
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+    public SportsmanService(IUnitOfWork unitOfWork, IMapper mapper) 
+        : base(unitOfWork, mapper)
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
     
     public async Task<IEnumerable<SportsmanDto>> GetSportsmenAsync()
     {
-        var sportsmen = await _unitOfWork
+        var sportsmen = await UnitOfWork
             .SportsmanRepository
             .GetAllAsync();
         
-        var sportsmenDto = _mapper.Map<IEnumerable<SportsmanDto>>(sportsmen);
+        var sportsmenDto = Mapper.Map<IEnumerable<SportsmanDto>>(sportsmen);
         
         return sportsmenDto;
     }
 
     public async Task<SportsmanDto?> GetSportsmanByIdAsync(int id)
     {
-        var sportsman = await _unitOfWork
+        var sportsman = await UnitOfWork
             .SportsmanRepository
             .GetByIdAsync(id);
 
@@ -43,26 +37,26 @@ public class SportsmanService: ISportsmanService
             throw new NotFoundException($"Sportsman was not found!");
         }
 
-        var sportsmanDto = _mapper.Map<SportsmanDto>(sportsman);
+        var sportsmanDto = Mapper.Map<SportsmanDto>(sportsman);
 
         return sportsmanDto;
     }
 
     public async Task<SportsmanDto> CreateSportsmanAsync(CreateSportsmanDto createSportsmanDto)
     {
-        var sportsman = _mapper.Map<Sportsman>(createSportsmanDto);
+        var sportsman = Mapper.Map<Sportsman>(createSportsmanDto);
 
-        await _unitOfWork.SportsmanRepository.AddAsync(sportsman);
-        await _unitOfWork.SaveAsync();
+        await UnitOfWork.SportsmanRepository.AddAsync(sportsman);
+        await UnitOfWork.SaveAsync();
 
-        var sportsmanDto = _mapper.Map<SportsmanDto>(sportsman);
+        var sportsmanDto = Mapper.Map<SportsmanDto>(sportsman);
 
         return sportsmanDto;
-    }
+   }
 
     public async Task UpdateSportsmanAsync(int id, UpdateSportsmanDto updateSportsmanDto)
     {
-        var sportsman = await _unitOfWork
+        var sportsman = await UnitOfWork
             .SportsmanRepository
             .GetByIdAsync(id);
 
@@ -77,13 +71,13 @@ public class SportsmanService: ISportsmanService
         sportsman.Sex = Enum.Parse<Sex>(updateSportsmanDto.Sex!);
         
         
-        _unitOfWork.SportsmanRepository.Update(sportsman);
-        await _unitOfWork.SaveAsync();
+        UnitOfWork.SportsmanRepository.Update(sportsman);
+        await UnitOfWork.SaveAsync();
     }
 
     public async Task DeleteSportsmanAsync(int id)
     {
-        var sportsman = await _unitOfWork
+        var sportsman = await UnitOfWork
             .SportsmanRepository
             .GetByIdAsync(id);
 
@@ -92,7 +86,8 @@ public class SportsmanService: ISportsmanService
             throw new NotFoundException($"Sportsman was not found!");
         }
         
-        _unitOfWork.SportsmanRepository.Delete(sportsman);
-        await _unitOfWork.SaveAsync();
+        UnitOfWork.SportsmanRepository.Delete(sportsman);
+        await UnitOfWork.SaveAsync();
     }
+
 }
