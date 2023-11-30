@@ -4,7 +4,7 @@ using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Persistence.Repositories;
 
-public class GenericRepository<T>: IGenericRepository<T> 
+public abstract class GenericRepository<T>: IGenericRepository<T> 
     where T : BaseEntity
 {
     private readonly AppDbContext _context;
@@ -23,12 +23,22 @@ public class GenericRepository<T>: IGenericRepository<T>
     
     public virtual async Task<T?> GetByIdAsync(int id)
     {
-        return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
+        return await DbSet.FindAsync(id);
+    }
+
+    public virtual async Task<List<T>> GetByIdsAsync(IEnumerable<int> ids)
+    {
+        return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
     }
 
     public virtual async Task AddAsync(T entity)
     {
         await _context.AddAsync(entity);
+    }
+
+    public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+    {
+        await _context.AddRangeAsync(entities);
     }
 
     public virtual void Update(T entity)
