@@ -8,4 +8,7 @@ public class Sportsman: BaseEntity
     public String? LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public Sex Sex { get; set; }
+    
+    public ICollection<Competitor> Competitors { get; set; }
+        = new List<Competitor>();
 }

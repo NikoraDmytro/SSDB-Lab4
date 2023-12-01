@@ -12,7 +12,7 @@ public class CompetitorRepository
     public CompetitorRepository(AppDbContext context) : base(context)
     {
     }
-    
+
     public async Task<PagedList<TReturn>> GetAllPagedMappedAsync<TReturn>(
         int competitionId,
         RequestParameters parameters,
@@ -34,7 +34,7 @@ public class CompetitorRepository
         return await map(query).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<Competitor>> GetBySportsmenIds(
+    public async Task<IEnumerable<Competitor>> GetBySportsmenIdsAsync(
         int competitionId, 
         IEnumerable<int> ids)
     {

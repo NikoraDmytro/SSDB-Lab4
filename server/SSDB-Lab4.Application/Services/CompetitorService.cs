@@ -33,7 +33,7 @@ namespace SSDB_Lab4.Application.Services
         {
             var duplicate = await UnitOfWork
                 .CompetitorRepository
-                .GetBySportsmenIds(competitionId, sportsmenIds);
+                .GetBySportsmenIdsAsync(competitionId, sportsmenIds);
             var duplicateArr = duplicate
                 .Select(d => d.SportsmanId)
                 .ToArray();

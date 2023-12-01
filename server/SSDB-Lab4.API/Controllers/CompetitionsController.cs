@@ -67,5 +67,36 @@ namespace SSDB_Lab4.API.Controllers
 
             return NoContent();
         }
+
+        [HttpGet(Endpoints.Competitions.GetAvailableSportsmen)]
+        public async Task<IActionResult> GetAvailableSportsmen(
+            [FromRoute] int id,
+            [FromQuery] RequestParameters parameters)
+        {
+            var sportsmen = await _competitionService
+                .GetAvailableSportsmenAsync(id, parameters);
+
+            return Ok(sportsmen);
+        }
+
+        [HttpGet(Endpoints.Competitions.GetDivisions)]
+        public async Task<IActionResult> GetDivisions([FromRoute] int id)
+        {
+            var divisions = await _competitionService
+                .GetDivisionsAsync(id);
+
+            return Ok(divisions);
+        }
+
+        [HttpGet(Endpoints.Competitions.GetDivisionCompetitors)]
+        public async Task<IActionResult> GetDivisionCompetitorsAsync(
+            [FromRoute] int id,
+            [FromRoute] int divisionId)
+        {
+            var competitors = await _competitionService
+                .GetDivisionCompetitorsAsync(id, divisionId);
+
+            return Ok(competitors);
+        }
     }
 }

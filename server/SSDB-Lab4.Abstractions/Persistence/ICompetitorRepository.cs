@@ -14,7 +14,7 @@ public interface ICompetitorRepository: IGenericRepository<Competitor>
         int competitionId,
         Func<IQueryable<Competitor>, IQueryable<TReturn>> map);
 
-    public Task<IEnumerable<Competitor>> GetBySportsmenIds(
+    public Task<IEnumerable<Competitor>> GetBySportsmenIdsAsync(
         int competitionId,
         IEnumerable<int> ids);
 }

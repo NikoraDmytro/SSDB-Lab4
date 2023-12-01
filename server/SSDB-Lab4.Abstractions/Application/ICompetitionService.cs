@@ -1,4 +1,7 @@
 using SSDB_Lab4.Common.DTOs.Competition;
+using SSDB_Lab4.Common.DTOs.Competitors;
+using SSDB_Lab4.Common.DTOs.Division;
+using SSDB_Lab4.Common.DTOs.Sportsman;
 using SSDB_Lab4.Common.RequestFeatures;
 
 namespace SSDB_Lab4.Abstractions.Application;
@@ -14,4 +17,11 @@ public interface ICompetitionService
         int id, 
         UpdateCompetitionDto updateCompetitionDto);
     Task DeleteCompetitionAsync(int id);
+    Task<IEnumerable<CompetitionDivisionDto>> GetDivisionsAsync(int id);
+    Task<IEnumerable<DivisionCompetitorDto>> GetDivisionCompetitorsAsync(
+        int id, 
+        int divisionId);
+    Task<PagedList<SportsmanDto>> GetAvailableSportsmenAsync(
+        int id,
+        RequestParameters parameters);
 }

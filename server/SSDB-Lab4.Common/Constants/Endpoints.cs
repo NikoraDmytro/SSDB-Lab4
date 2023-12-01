@@ -20,6 +20,11 @@ public class Endpoints
         public const string Create = Base;
         public const string Update = $"{Base}/{{id}}";
         public const string Delete = $"{Base}/{{id}}";
+        public const string GetAvailableSportsmen =
+            $"{Base}/{{id}}/sportsmen";
+        public const string GetDivisions = $"{Base}/{{id}}/divisions";
+        public const string GetDivisionCompetitors = 
+            $"{Base}/{{id}}/divisions/{{divisionId}}";
     }
     
     public static class Divisions
@@ -41,7 +46,5 @@ public class Endpoints
         public const string SetWeight = $"{Base}/{{id}}/weight";
         public const string SetLapNum = $"{Base}/{{id}}/lap"; 
         public const string Delete = $"{Base}/{{id}}";
-        public const string GetAllDivisions = $"{Base}/divisions";
-        public const string GetDivisionsCompetitors = $"{Base}/divisions/{{id}}";
     }
 }

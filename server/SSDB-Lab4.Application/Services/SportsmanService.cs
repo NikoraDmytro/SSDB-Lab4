@@ -91,5 +91,4 @@ public class SportsmanService: BaseService, ISportsmanService
         UnitOfWork.SportsmanRepository.Delete(sportsman);
         await UnitOfWork.SaveAsync();
     }
-
 }

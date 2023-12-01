@@ -6,6 +6,7 @@ public class Competition: BaseEntity
     public DateTime StartDate { get; set; }
     public int Duration { get; set; }
     public string? City { get; set; }
-    
-    public ICollection<Competitor>? Competitors { get; set; }
+
+    public ICollection<Competitor> Competitors { get; set; }
+        = new List<Competitor>();
 }

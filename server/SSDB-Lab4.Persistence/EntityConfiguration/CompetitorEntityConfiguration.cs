@@ -34,7 +34,7 @@ public class CompetitorEntityConfiguration
 
         builder
             .HasOne(c => c.Sportsman)
-            .WithMany()
+            .WithMany(s => s.Competitors)
             .HasForeignKey(c => c.SportsmanId)
             .OnDelete(DeleteBehavior.Restrict);
 
