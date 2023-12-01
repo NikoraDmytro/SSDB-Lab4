@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SSDB_Lab4.Abstractions.Persistence;
 using SSDB_Lab4.Domain.entities;
 
@@ -8,5 +9,13 @@ public class CompetitionRepository
 {
     public CompetitionRepository(AppDbContext context) : base(context)
     {
+    }
+    
+    public async Task<IEnumerable<Competition>> GetOverlapping(string name, DateTime startDate)
+    {
+        return await DbSet
+            .Where(c => c.Name == name)
+            .Where(c => (c.StartDate - startDate).TotalDays < 30)
+            .ToListAsync();
     }
 }

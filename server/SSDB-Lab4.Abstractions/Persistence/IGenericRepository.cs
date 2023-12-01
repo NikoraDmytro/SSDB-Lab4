@@ -1,3 +1,4 @@
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Abstractions.Persistence;
@@ -5,6 +6,8 @@ namespace SSDB_Lab4.Abstractions.Persistence;
 public interface IGenericRepository<T> where T: BaseEntity
 {
     Task<List<T>> GetAllAsync();
+    Task<PagedList<T>> GetAllPagedAsync(
+        RequestParameters parameters);
     Task<T?> GetByIdAsync(int id);
     Task<List<T>> GetByIdsAsync(IEnumerable<int> ids);
     Task AddAsync(T entity);

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using SSDB_Lab4.Abstractions.Persistence;
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
+using SSDB_Lab4.Persistence.Extensions;
 
 namespace SSDB_Lab4.Persistence.Repositories;
 
@@ -11,13 +13,16 @@ public class CompetitorRepository
     {
     }
     
-    public async Task<List<TReturn>> GetAllMappedAsync<TReturn>(
+    public async Task<PagedList<TReturn>> GetAllPagedMappedAsync<TReturn>(
         int competitionId,
+        RequestParameters parameters,
         Func<IQueryable<Competitor>, IQueryable<TReturn>> map)
     {
         var query = DbSet.Where(c => c.CompetitionId == competitionId);
 
-        return await map(query).ToListAsync();
+        return await map(query).ToPagedListAsync(
+            parameters.PageNumber, 
+            parameters.PageSize);
     }
 
     public async Task<TReturn?> GetByIdMappedAsync<TReturn>(

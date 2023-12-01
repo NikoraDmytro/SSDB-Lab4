@@ -3,6 +3,7 @@ using SSDB_Lab4.Abstractions.Application;
 using SSDB_Lab4.API.Attributes;
 using SSDB_Lab4.Common.Constants;
 using SSDB_Lab4.Common.DTOs.Sportsman;
+using SSDB_Lab4.Common.RequestFeatures;
 
 namespace SSDB_Lab4.API.Controllers;
 
@@ -18,9 +19,11 @@ public class SportsmenController: ControllerBase
     }
 
     [HttpGet(Endpoints.Sportsmen.GetAll)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] RequestParameters parameters)
     {
-        var sportsmen = await _sportsmanService.GetSportsmenAsync();
+        var sportsmen = await _sportsmanService
+            .GetSportsmenAsync(parameters);
         
         return Ok(sportsmen);
     }

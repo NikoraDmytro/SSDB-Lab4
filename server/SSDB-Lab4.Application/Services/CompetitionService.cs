@@ -3,6 +3,7 @@ using SSDB_Lab4.Abstractions.Application;
 using SSDB_Lab4.Abstractions.Persistence;
 using SSDB_Lab4.Common.DTOs.Competition;
 using SSDB_Lab4.Common.Exceptions;
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Application.Services;
@@ -13,14 +14,30 @@ public class CompetitionService: BaseService, ICompetitionService
         : base(unitOfWork, mapper)
     {
     }
+
+    private async void ThrowIfOverlaps(String name, DateTime startDate)
+    {
+        var overlappingCompetitions = await UnitOfWork
+            .CompetitionRepository
+            .GetOverlapping(name, startDate);
+        var overlappingCompetitionsArr = overlappingCompetitions
+            .ToArray();
+
+        if (overlappingCompetitionsArr.Length != 0)
+        {
+            throw new BadRequestException($"The same competition can't be held more than once every 30 days!");
+        }
+
+    }
     
-    public async Task<IEnumerable<CompetitionDto>> GetCompetitionsAsync() 
+    public async Task<PagedList<CompetitionDto>> GetCompetitionsAsync(
+        RequestParameters parameters) 
     {
         var competitions = await UnitOfWork
             .CompetitionRepository
-            .GetAllAsync();
+            .GetAllPagedAsync(parameters);
 
-        var competitionsDto = Mapper.Map<IEnumerable<CompetitionDto>>(competitions);
+        var competitionsDto = Mapper.Map<PagedList<CompetitionDto>>(competitions);
 
         return competitionsDto;
     }

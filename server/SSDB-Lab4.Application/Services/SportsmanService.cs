@@ -4,6 +4,7 @@ using SSDB_Lab4.Abstractions.Persistence;
 using SSDB_Lab4.Common;
 using SSDB_Lab4.Common.DTOs.Sportsman;
 using SSDB_Lab4.Common.Exceptions;
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Application.Services;
@@ -15,13 +16,14 @@ public class SportsmanService: BaseService, ISportsmanService
     {
     }
     
-    public async Task<IEnumerable<SportsmanDto>> GetSportsmenAsync()
+    public async Task<PagedList<SportsmanDto>> GetSportsmenAsync(
+        RequestParameters parameters)
     {
         var sportsmen = await UnitOfWork
             .SportsmanRepository
-            .GetAllAsync();
+            .GetAllPagedAsync(parameters);
         
-        var sportsmenDto = Mapper.Map<IEnumerable<SportsmanDto>>(sportsmen);
+        var sportsmenDto = Mapper.Map<PagedList<SportsmanDto>>(sportsmen);
         
         return sportsmenDto;
     }

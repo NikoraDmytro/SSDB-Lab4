@@ -3,6 +3,7 @@ using SSDB_Lab4.Abstractions.Application;
 using SSDB_Lab4.Abstractions.Persistence;
 using SSDB_Lab4.Common.DTOs.Competitors;
 using SSDB_Lab4.Common.Exceptions;
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Application.Services
@@ -67,11 +68,16 @@ namespace SSDB_Lab4.Application.Services
             return Mapper.ProjectTo<CompetitorDto>(queryable);
         }
 
-        public async Task<IEnumerable<CompetitorDto>> GetCompetitorsAsync(int competitionId)
+        public async Task<PagedList<CompetitorDto>> GetCompetitorsAsync(
+            int competitionId,
+            RequestParameters parameters)
         {
             var competitorsDto = await UnitOfWork
                 .CompetitorRepository
-                .GetAllMappedAsync(competitionId, ProjectQueryable);
+                .GetAllPagedMappedAsync(
+                    competitionId,
+                    parameters,
+                    ProjectQueryable);
 
             return competitorsDto;
         }
@@ -121,7 +127,6 @@ namespace SSDB_Lab4.Application.Services
             await UnitOfWork.SaveAsync();
         }
 
-        /*TODO rebuild tossup hierarchy*/
         public async Task UpdateCompetitorAsync(
             int id, 
             UpdateCompetitorLapDto updateCompetitorLapDto)

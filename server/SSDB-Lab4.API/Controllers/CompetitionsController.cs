@@ -3,6 +3,7 @@ using SSDB_Lab4.Abstractions.Application;
 using SSDB_Lab4.API.Attributes;
 using SSDB_Lab4.Common.Constants;
 using SSDB_Lab4.Common.DTOs.Competition;
+using SSDB_Lab4.Common.RequestFeatures;
 
 namespace SSDB_Lab4.API.Controllers
 {
@@ -18,9 +19,11 @@ namespace SSDB_Lab4.API.Controllers
         }
 
         [HttpGet(Endpoints.Competitions.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] RequestParameters parameters)
         {
-            var competitions = await _competitionService.GetCompetitionsAsync();
+            var competitions = await _competitionService
+                .GetCompetitionsAsync(parameters);
 
             return Ok(competitions);
         }
