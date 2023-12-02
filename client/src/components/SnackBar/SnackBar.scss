@@ -1,0 +1,24 @@
+.snackBarWrapper {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+
+  .imageContainer {
+    width: 18px;
+    margin-left: 5px;
+  }
+
+  .closeBtn {
+    position: absolute;
+    right: 10px;
+    top: 4px;
+    display: inline-block;
+    font-size: 23px;
+    line-height: 20px;
+    color: #ededed;
+    cursor: pointer;
+    &:hover {
+      color: #ffffff;
+    }
+  }
+}
