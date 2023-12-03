@@ -1,15 +1,17 @@
-import { Button } from "@mui/material";
+import { useEffect } from "react";
+import { Button, LinearProgress } from "@mui/material";
 
 import deleteIcon from "../../assets/icons/delete.svg";
 import editIcon from "../../assets/icons/edit.svg";
 
+import { useRootStoreContext } from "../../store";
 import { PagedDataTable } from "../../components/DataTable";
 
 import { Competition } from "../../models/Competition";
 import { TableColumns } from "../../types/DataTableTypes";
-import { Paged } from "../../types/Paged";
 
 import "./Calendar.scss";
+import { observer } from "mobx-react";
 
 type ColumnType = Competition & { controls: string };
 
@@ -21,7 +23,7 @@ const columns: TableColumns<Competition, ColumnType>[] = [
   {
     name: "startDate",
     label: "Start Date",
-    renderItem: (item) => item.startDate.toLocaleDateString(),
+    renderItem: (item) => new Date(item.startDate).toLocaleDateString(),
   },
   {
     name: "duration",
@@ -42,49 +44,23 @@ const columns: TableColumns<Competition, ColumnType>[] = [
   },
 ];
 
-export const Calendar = () => {
-  const competitions: Paged<Competition> = {
-    pageSize: 5,
-    totalCount: 5,
-    currentPage: 0,
-    items: [
-      {
-        id: 1,
-        duration: 2,
-        city: "Kharkiv",
-        name: "Bla-Bla",
-        startDate: new Date(),
-      },
-      {
-        id: 2,
-        duration: 2,
-        city: "Kharkiv",
-        name: "Bla-Bla",
-        startDate: new Date(),
-      },
-      {
-        id: 3,
-        duration: 2,
-        city: "Kharkiv",
-        name: "Bla-Bla",
-        startDate: new Date(),
-      },
-      {
-        id: 4,
-        duration: 2,
-        city: "Kharkiv",
-        name: "Bla-Bla",
-        startDate: new Date(),
-      },
-      {
-        id: 5,
-        duration: 2,
-        city: "Kharkiv",
-        name: "Bla-Bla",
-        startDate: new Date(),
-      },
-    ],
-  };
+export const Calendar = observer(() => {
+  const {
+    competitionStore: {
+      total,
+      competitions,
+      fetchCompetitions,
+      pageSize,
+      isLoading,
+      currentPage,
+      setPageSize,
+      setCurrentPage,
+    },
+  } = useRootStoreContext();
+
+  useEffect(() => {
+    fetchCompetitions();
+  }, [pageSize, currentPage]);
 
   return (
     <div className="calendar-wrapper">
@@ -93,12 +69,21 @@ export const Calendar = () => {
           Add Competition
         </Button>
       </div>
-      <PagedDataTable
-        tableData={competitions}
-        tableColumns={columns}
-        onChangePageSize={() => null}
-        onPageChange={() => null}
-      />
+      {isLoading ? (
+        <LinearProgress />
+      ) : (
+        <PagedDataTable
+          tableData={{
+            totalCount: total,
+            pageSize: pageSize,
+            items: competitions,
+            currentPage: currentPage - 1,
+          }}
+          tableColumns={columns}
+          onChangePageSize={setPageSize}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
-};
+});

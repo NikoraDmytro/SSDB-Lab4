@@ -33,7 +33,7 @@ const PagedDataTable = <T extends WithId, P extends T>(
     <>
       <DataTable tableData={tableData.items} tableColumns={tableColumns} />
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 15, 20]}
         component="div"
         count={tableData.totalCount}
         page={tableData.currentPage}

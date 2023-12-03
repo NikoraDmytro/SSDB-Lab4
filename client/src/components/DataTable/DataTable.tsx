@@ -16,16 +16,6 @@ interface TableProps<T extends WithId, P extends T> {
 const DataTable = <T extends WithId, P extends T>(props: TableProps<T, P>) => {
   const { tableData, tableColumns } = props;
 
-  console.log(
-    tableData.map((item) =>
-      tableColumns.map((column) =>
-        column.renderItem
-          ? column.renderItem(item)
-          : (item[column.name as keyof T] as string) || "-"
-      )
-    )
-  );
-
   return (
     <>
       <Table stickyHeader>
