@@ -16,6 +16,8 @@ class CompetitionStore {
   isLoading: boolean = false;
   isMutating: boolean = false;
 
+  selectedForDelete?: Competition;
+
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
@@ -37,6 +39,18 @@ class CompetitionStore {
     this.isLoading = loading;
   };
 
+  setMutating = (mutating: boolean) => {
+    this.isMutating = mutating;
+  };
+
+  setCompetitions = (competitions: Competition[]) => {
+    this.competitions = competitions;
+  };
+
+  selectForDelete = (competition: Competition) => {
+    this.selectedForDelete = competition;
+  };
+
   fetchCompetitions = async () => {
     try {
       this.setLoading(true);
@@ -46,7 +60,7 @@ class CompetitionStore {
         pageNumber: this.currentPage,
       });
 
-      this.competitions = result.items;
+      this.setCompetitions(result.items);
       this.setPageSize(result.pageSize);
       this.setCurrentPage(result.currentPage);
       this.setTotal(result.totalCount);
@@ -65,25 +79,25 @@ class CompetitionStore {
 
   createCompetition = async (competition: Competition) => {
     try {
-      this.isMutating = true;
+      this.setMutating(true);
       await CompetitionService.createCompetition(competition);
       this.fetchCompetitions();
     } catch (error) {
       console.error("Error creating competition:", error);
     } finally {
-      this.isMutating = false;
+      this.setMutating(false);
     }
   };
 
   updateCompetition = async (id: number, competition: Competition) => {
     try {
-      this.isMutating = true;
+      this.setMutating(true);
       await CompetitionService.updateCompetition(id, competition);
       this.fetchCompetitions();
     } catch (error) {
       console.error("Error updating competition:", error);
     } finally {
-      this.isMutating = false;
+      this.setMutating(false);
     }
   };
 
