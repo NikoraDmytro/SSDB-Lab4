@@ -17,7 +17,7 @@ public class CompetitionRepository
     {
         return await DbSet
             .Where(c => c.Name == name)
-            .Where(c => (c.StartDate - startDate).TotalDays < 30)
+            .Where(c => EF.Functions.DateDiffDay(c.StartDate, startDate) < 30)
             .ToListAsync();
     }
 
