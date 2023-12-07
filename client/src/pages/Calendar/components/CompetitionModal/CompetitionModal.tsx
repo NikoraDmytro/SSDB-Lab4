@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useRootStoreContext } from "../../../../store";
 import { AppModal } from "../../../../components/AppModal";
 import { InputFormField } from "../../../../components/Inputs/InputFormField";
-import { CreateCompetition } from "../../../../models/CreateCompetition";
+import { CreateCompetition } from "../../../../models/Competition/CreateCompetition";
 
 import regionalCenters from "../../../../const/cities";
 import { FormatIso } from "../../../../utils/dateUtils";

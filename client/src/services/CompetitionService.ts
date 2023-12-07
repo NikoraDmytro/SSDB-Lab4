@@ -1,8 +1,8 @@
 import http from "./index";
 import { Paged } from "../types/Paged";
-import { Competition } from "../models/Competition";
+import { Competition } from "../models/Competition/Competition";
 import { RequestParameters } from "../types/RequestParameters";
-import { CreateCompetition } from "../models/CreateCompetition";
+import { CreateCompetition } from "../models/Competition/CreateCompetition";
 
 const BASE_URL = "competitions/";
 

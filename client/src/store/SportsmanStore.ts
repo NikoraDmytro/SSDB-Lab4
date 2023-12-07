@@ -2,26 +2,26 @@ import RootStore from ".";
 import axios from "axios";
 import { makeAutoObservable } from "mobx";
 
-import { Competition } from "../models/Competition/Competition";
-import CompetitionService from "../services/CompetitionService";
-import { CreateCompetition } from "../models/Competition/CreateCompetition";
 import { ResponseError } from "../types/AxiosErrorTypes";
+import { Sportsman } from "../models/Sportsman/Sportsman";
+import SportsmanService from "../services/SportsmanService";
+import { CreateSportsman } from "../models/Sportsman/CreateSportsman";
 
-class CompetitionStore {
+class SportsmanStore {
   rootStore: RootStore;
 
   total: number = 0;
   pageSize: number = 10;
   currentPage: number = 1;
-  competitions: Competition[] = [];
+  sportsmen: Sportsman[] = [];
 
   isLoading: boolean = false;
   isMutating: boolean = false;
 
   mutationError?: ResponseError;
 
-  selectedForEdit?: Competition;
-  selectedForDelete?: Competition;
+  selectedForEdit?: Sportsman;
+  selectedForDelete?: Sportsman;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -48,32 +48,32 @@ class CompetitionStore {
     this.isMutating = mutating;
   };
 
-  setCompetitions = (competitions: Competition[]) => {
-    this.competitions = competitions;
+  setSportsmen = (sportsmen: Sportsman[]) => {
+    this.sportsmen = sportsmen;
   };
 
-  selectForDelete = (competition: Competition) => {
-    this.selectedForDelete = competition;
+  selectForDelete = (sportsmen: Sportsman) => {
+    this.selectedForDelete = sportsmen;
   };
 
-  selectForEdit = (competition: Competition) => {
-    this.selectedForEdit = competition;
+  selectForEdit = (sportsmen: Sportsman) => {
+    this.selectedForEdit = sportsmen;
   };
 
   setMutationError = (error?: ResponseError) => {
     this.mutationError = error;
   };
 
-  fetchCompetitions = async () => {
+  fetchSportsmen = async () => {
     try {
       this.setLoading(true);
 
-      const result = await CompetitionService.getAllCompetitions({
+      const result = await SportsmanService.getAllSportsmen({
         pageSize: this.pageSize,
         pageNumber: this.currentPage,
       });
 
-      this.setCompetitions(result.items);
+      this.setSportsmen(result.items);
       this.setPageSize(result.pageSize);
       this.setCurrentPage(result.currentPage);
       this.setTotal(result.totalCount);
@@ -89,11 +89,11 @@ class CompetitionStore {
     }
   };
 
-  createCompetition = async (competition: CreateCompetition) => {
+  createSportsman = async (sportsman: CreateSportsman) => {
     try {
       this.setMutating(true);
-      await CompetitionService.createCompetition(competition);
-      this.fetchCompetitions();
+      await SportsmanService.createSportsman(sportsman);
+      this.fetchSportsmen();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status == 400 || error.response?.status == 400) {
@@ -112,11 +112,11 @@ class CompetitionStore {
     return true;
   };
 
-  updateCompetition = async (id: number, competition: CreateCompetition) => {
+  updateSportsman = async (id: number, sportsman: CreateSportsman) => {
     try {
       this.setMutating(true);
-      await CompetitionService.updateCompetition(id, competition);
-      this.fetchCompetitions();
+      await SportsmanService.updateSportsman(id, sportsman);
+      this.fetchSportsmen();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status == 400 || error.response?.status == 400) {
@@ -135,11 +135,11 @@ class CompetitionStore {
     return true;
   };
 
-  deleteCompetition = async (id: number) => {
+  deleteSportsman = async (id: number) => {
     try {
       this.setLoading(true);
-      await CompetitionService.deleteCompetition(id);
-      this.fetchCompetitions();
+      await SportsmanService.deleteSportsman(id);
+      this.fetchSportsmen();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         this.rootStore.snackBarStore.showSnackBar(
@@ -153,4 +153,4 @@ class CompetitionStore {
   };
 }
 
-export default CompetitionStore;
+export default SportsmanStore;

@@ -1,0 +1,36 @@
+.table-wrapper {
+  width: 100%;
+
+  .table-menu {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: flex-end;
+
+    .add-button {
+      width: 250px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 4px;
+      color: #000000de;
+      background-color: #e0e0e0;
+      box-shadow: 0 3 1 -2 #00000033, 0 2 2 0 #00000024, 0 1 5 0 #0000001f;
+    }
+  }
+  thead {
+    th {
+      font-weight: 700;
+    }
+  }
+
+  .control-buttons {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    > img {
+      cursor: pointer;
+    }
+  }
+}

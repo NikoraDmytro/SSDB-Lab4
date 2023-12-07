@@ -6,46 +6,42 @@ import deleteIcon from "../../../assets/icons/delete.svg";
 import editIcon from "../../../assets/icons/edit.svg";
 
 import { useRootStoreContext } from "../../../store";
-import { Competition } from "../../../models/Competition/Competition";
+import { Sportsman } from "../../../models/Sportsman/Sportsman";
+import { IsoToLocale } from "../../../utils/dateUtils";
 import { TableColumns } from "../../../types/DataTableTypes";
 import { PagedDataTable } from "../../../components/DataTable";
-import { IsoToLocale } from "../../../utils/dateUtils";
 
-type ColumnType = Competition & { controls: string };
+type ColumnType = Sportsman & { controls: string };
 
-export const CalendarTable = observer(() => {
+export const SportsmanTable = observer(() => {
   const navigate = useNavigate();
   const {
-    competitionStore: {
+    sportsmanStore: {
       total,
       pageSize,
       isLoading,
       currentPage,
       setPageSize,
-      competitions,
+      sportsmen,
       setCurrentPage,
       selectForDelete,
       selectForEdit,
     },
   } = useRootStoreContext();
 
-  const columns: TableColumns<Competition, ColumnType>[] = [
+  const columns: TableColumns<Sportsman, ColumnType>[] = [
     {
-      name: "name",
-      label: "Name",
+      name: "fullName",
+      label: "Full Name",
     },
     {
-      name: "startDate",
-      label: "Start Date",
-      renderItem: (item) => IsoToLocale(item.startDate),
+      name: "birthDate",
+      label: "Birth Date",
+      renderItem: (item) => IsoToLocale(item.birthDate),
     },
     {
-      name: "duration",
-      label: "Duration",
-    },
-    {
-      name: "city",
-      label: "City",
+      name: "sex",
+      label: "Sex",
     },
     {
       name: "controls",
@@ -73,15 +69,15 @@ export const CalendarTable = observer(() => {
   ];
 
   return (
-    <div className="calendar-wrapper">
-      <div className="calendar-menu">
+    <div className="table-wrapper">
+      <div className="table-menu">
         <Button
           className="add-button"
           variant="contained"
           color="inherit"
           onClick={() => navigate("add")}
         >
-          Add Competition
+          Add Sportsman
         </Button>
       </div>
       {isLoading ? (
@@ -91,7 +87,7 @@ export const CalendarTable = observer(() => {
           tableData={{
             totalCount: total,
             pageSize: pageSize,
-            items: competitions,
+            items: sportsmen,
             currentPage: currentPage - 1,
           }}
           tableColumns={columns}
