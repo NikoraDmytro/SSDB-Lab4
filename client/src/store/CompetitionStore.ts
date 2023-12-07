@@ -4,6 +4,7 @@ import { makeAutoObservable } from "mobx";
 
 import { Competition } from "../models/Competition";
 import CompetitionService from "../services/CompetitionService";
+import { CreateCompetition } from "../models/CreateCompetition";
 
 class CompetitionStore {
   rootStore: RootStore;
@@ -16,6 +17,7 @@ class CompetitionStore {
   isLoading: boolean = false;
   isMutating: boolean = false;
 
+  selectedForEdit?: Competition;
   selectedForDelete?: Competition;
 
   constructor(rootStore: RootStore) {
@@ -51,6 +53,10 @@ class CompetitionStore {
     this.selectedForDelete = competition;
   };
 
+  selectForEdit = (competition: Competition) => {
+    this.selectedForEdit = competition;
+  };
+
   fetchCompetitions = async () => {
     try {
       this.setLoading(true);
@@ -77,25 +83,36 @@ class CompetitionStore {
     }
   };
 
-  createCompetition = async (competition: Competition) => {
+  createCompetition = async (competition: CreateCompetition) => {
     try {
       this.setMutating(true);
       await CompetitionService.createCompetition(competition);
       this.fetchCompetitions();
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        this.rootStore.snackBarStore.showSnackBar(
+          error.response?.data.title || error.response?.data.message,
+          "error"
+        );
+      }
       console.error("Error creating competition:", error);
     } finally {
       this.setMutating(false);
     }
   };
 
-  updateCompetition = async (id: number, competition: Competition) => {
+  updateCompetition = async (id: number, competition: CreateCompetition) => {
     try {
       this.setMutating(true);
       await CompetitionService.updateCompetition(id, competition);
       this.fetchCompetitions();
     } catch (error) {
-      console.error("Error updating competition:", error);
+      if (axios.isAxiosError(error)) {
+        this.rootStore.snackBarStore.showSnackBar(
+          error.response?.data.title,
+          "error"
+        );
+      }
     } finally {
       this.setMutating(false);
     }

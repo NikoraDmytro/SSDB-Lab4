@@ -34,23 +34,3 @@
     }
   }
 }
-
-.form {
-  position: relative;
-  width: 576px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 29px;
-  margin: 45px 50px;
-  .inputs-group {
-    width: 100%;
-    display: flex;
-    gap: 36px;
-  }
-  .close-icon {
-    position: absolute;
-    top: -25px;
-    right: -30px;
-  }
-}

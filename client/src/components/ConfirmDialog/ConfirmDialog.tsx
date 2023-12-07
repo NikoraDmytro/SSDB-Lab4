@@ -24,7 +24,9 @@ export const ConfirmDialog = (props: Props) => {
 
   return (
     <Dialog open={true} onClose={handleClose}>
-      <DialogTitle>Delete {props.title}?</DialogTitle>
+      <DialogTitle sx={{ textTransform: "uppercase" }}>
+        Remove {props.title}
+      </DialogTitle>
       <DialogContent>{props.content}</DialogContent>
       <DialogActions>
         <Button color="error" onClick={handleClose}>

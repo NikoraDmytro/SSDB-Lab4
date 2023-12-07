@@ -1,5 +1,4 @@
-export interface Competition {
-  id: number;
+export interface CreateCompetition {
   name: string;
   city: string;
   startDate: string;

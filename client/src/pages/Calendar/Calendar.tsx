@@ -4,10 +4,11 @@ import { Route, Routes } from "react-router-dom";
 
 import { useRootStoreContext } from "../../store";
 
-import { CalendarTable } from "./CalendarTable";
-import { DeleteCompetitionDialog } from "./DeleteCompetitionDialog";
+import { CalendarTable } from "./components/CalendarTable";
+import { DeleteCompetitionDialog } from "./components/DeleteCompetitionDialog";
 
 import "./Calendar.scss";
+import { CompetitionModal } from "./components/CompetitionModal/CompetitionModal";
 
 export const Calendar = observer(() => {
   const {
@@ -23,6 +24,8 @@ export const Calendar = observer(() => {
     <Routes>
       <Route path="/" element={<CalendarTable />}>
         <Route path="confirm" element={<DeleteCompetitionDialog />} />
+        <Route path="add" element={<CompetitionModal />} />
+        <Route path="edit" element={<CompetitionModal isEdit />} />
       </Route>
     </Routes>
   );
