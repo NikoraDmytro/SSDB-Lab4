@@ -5,6 +5,7 @@ import { makeAutoObservable } from "mobx";
 import { Competition } from "../models/Competition";
 import CompetitionService from "../services/CompetitionService";
 import { CreateCompetition } from "../models/CreateCompetition";
+import { ResponseError } from "../types/AxiosErrorTypes";
 
 class CompetitionStore {
   rootStore: RootStore;
@@ -16,6 +17,8 @@ class CompetitionStore {
 
   isLoading: boolean = false;
   isMutating: boolean = false;
+
+  mutationError?: ResponseError;
 
   selectedForEdit?: Competition;
   selectedForDelete?: Competition;
@@ -57,6 +60,10 @@ class CompetitionStore {
     this.selectedForEdit = competition;
   };
 
+  setMutationError = (error?: ResponseError) => {
+    this.mutationError = error;
+  };
+
   fetchCompetitions = async () => {
     try {
       this.setLoading(true);
@@ -77,7 +84,6 @@ class CompetitionStore {
           "error"
         );
       }
-      console.error("Error fetching competitions", error);
     } finally {
       this.setLoading(false);
     }
@@ -90,15 +96,20 @@ class CompetitionStore {
       this.fetchCompetitions();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        this.rootStore.snackBarStore.showSnackBar(
-          error.response?.data.title || error.response?.data.message,
-          "error"
-        );
+        if (error.status == 400 || error.response?.status == 400) {
+          this.setMutationError(error);
+        } else {
+          this.rootStore.snackBarStore.showSnackBar(
+            error.response?.data.title || error.response?.data.message,
+            "error"
+          );
+        }
       }
-      console.error("Error creating competition:", error);
+      return false;
     } finally {
       this.setMutating(false);
     }
+    return true;
   };
 
   updateCompetition = async (id: number, competition: CreateCompetition) => {
@@ -108,14 +119,20 @@ class CompetitionStore {
       this.fetchCompetitions();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        this.rootStore.snackBarStore.showSnackBar(
-          error.response?.data.title,
-          "error"
-        );
+        if (error.status == 400 || error.response?.status == 400) {
+          this.setMutationError(error);
+        } else {
+          this.rootStore.snackBarStore.showSnackBar(
+            error.response?.data.message,
+            "error"
+          );
+        }
       }
+      return false;
     } finally {
       this.setMutating(false);
     }
+    return true;
   };
 
   deleteCompetition = async (id: number) => {
@@ -130,7 +147,6 @@ class CompetitionStore {
           "error"
         );
       }
-      console.error("Error deleting competition:", error);
     } finally {
       this.setLoading(false);
     }

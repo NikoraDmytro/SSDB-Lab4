@@ -19,7 +19,7 @@ const InputFormField = (props: Props): JSX.Element => {
       type={props.type}
       label={props.label}
       error={meta.touched && !!meta.error}
-      helperText={meta.touched && meta.error}
+      helperText={meta.touched && <pre>{meta.error}</pre>}
     />
   );
 };

@@ -45,7 +45,7 @@ export const SelectInput = ({ label, items, name }: Props) => {
         type="text"
         label={label}
         error={meta.touched && !!meta.error}
-        helperText={meta.touched && meta.error}
+        helperText={meta.touched && <pre>{meta.error}</pre>}
       />
 
       <ul

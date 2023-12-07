@@ -1,5 +1,6 @@
-import { Formik, Form } from "formik";
-import { Button, CircularProgress } from "@mui/material";
+import { useEffect } from "react";
+import { Formik, Form, FormikHelpers } from "formik";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,8 @@ import { CreateCompetition } from "../../../../models/CreateCompetition";
 
 import regionalCenters from "../../../../const/cities";
 import { FormatIso } from "../../../../utils/dateUtils";
+import { isBadRequestError } from "../../../../utils/checkResponseErrorType";
+import { getValidationErrors } from "../../../../utils/getValidationErrors";
 import { competitionValidationSchema } from "../../utils/competitionValidation";
 import { SelectInput } from "../../../../components/Inputs/SelectInput";
 
@@ -33,9 +36,17 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
       selectedForEdit,
       updateCompetition,
       createCompetition,
+      mutationError,
+      setMutationError,
       isMutating,
     },
   } = useRootStoreContext();
+
+  useEffect(() => {
+    return () => {
+      setMutationError();
+    };
+  }, [setMutationError]);
 
   if (isEdit && !selectedForEdit) {
     navigate(-1);
@@ -49,14 +60,23 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
     };
   }
 
-  const submitHandler = async (values: CreateCompetition) => {
+  const submitHandler = async (
+    values: CreateCompetition,
+    { setSubmitting }: FormikHelpers<CreateCompetition>
+  ) => {
+    setMutationError();
+
+    let success;
     if (isEdit && selectedForEdit) {
-      await updateCompetition(selectedForEdit.id, values);
+      success = await updateCompetition(selectedForEdit.id, values);
     } else {
-      await createCompetition(values);
+      success = await createCompetition(values);
     }
-    if (!isMutating) {
+    if (success) {
       navigate(-1);
+      setSubmitting(false);
+    } else {
+      setSubmitting(false);
     }
   };
 
@@ -67,31 +87,55 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
         validationSchema={competitionValidationSchema}
         onSubmit={submitHandler}
       >
-        <Form className="form">
-          <InputFormField label="Competition name" name="name" type="text" />
-          <div className="inputs-group">
-            <InputFormField label="Start date" name="startDate" type="date" />
-            <InputFormField label="Duration" name="duration" type="number" />
-          </div>
-          <SelectInput
-            label="City"
-            name="city"
-            items={regionalCenters.map((city) => ({
-              label: city,
-              value: city,
-            }))}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={isMutating}
-            sx={{ width: "60%" }}
-          >
-            {isMutating ? <CircularProgress /> : "Save"}
-          </Button>
-        </Form>
+        {({ setErrors }) => {
+          if (mutationError) {
+            setErrors(getValidationErrors(mutationError));
+          }
+          return (
+            <Form className="form">
+              <InputFormField
+                label="Competition name"
+                name="name"
+                type="text"
+              />
+              <div className="inputs-group">
+                <InputFormField
+                  label="Start date"
+                  name="startDate"
+                  type="date"
+                />
+                <InputFormField
+                  label="Duration"
+                  name="duration"
+                  type="number"
+                />
+              </div>
+              <SelectInput
+                label="City"
+                name="city"
+                items={regionalCenters.map((city) => ({
+                  label: city,
+                  value: city,
+                }))}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                disabled={isMutating}
+                sx={{ width: "60%" }}
+              >
+                {isMutating ? <CircularProgress /> : "Save"}
+              </Button>
+              {mutationError && isBadRequestError(mutationError) && (
+                <Typography variant="h6" color="red">
+                  {mutationError.response?.data.message}
+                </Typography>
+              )}
+            </Form>
+          );
+        }}
       </Formik>
     </AppModal>
   );
