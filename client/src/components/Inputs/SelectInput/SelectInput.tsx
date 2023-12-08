@@ -10,10 +10,11 @@ import "./SelectInput.scss";
 interface Props {
   name: string;
   label: string;
+  filterable?: boolean;
   items: DropDownItem<string>[];
 }
 
-export const SelectInput = ({ label, items, name }: Props) => {
+export const SelectInput = ({ label, items, name, filterable }: Props) => {
   const [active, setActive] = useState(false);
   const [field, meta, helpers] = useField(name);
   const [visibleText, setVisibleText] = useState("");
@@ -77,13 +78,14 @@ export const SelectInput = ({ label, items, name }: Props) => {
           active: active,
         })}
       >
-        {items
-          .filter((item) => item.label.includes(visibleText))
-          .map((item) => (
-            <li key={item.label} onClick={() => handleSelect(item)}>
-              {item.label}
-            </li>
-          ))}
+        {(filterable
+          ? items.filter((item) => item.label.includes(visibleText))
+          : items
+        ).map((item) => (
+          <li key={item.label} onClick={() => handleSelect(item)}>
+            {item.label}
+          </li>
+        ))}
       </ul>
     </div>
   );

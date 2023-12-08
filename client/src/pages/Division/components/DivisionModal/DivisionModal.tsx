@@ -7,35 +7,35 @@ import { useNavigate } from "react-router-dom";
 import { useRootStoreContext } from "../../../../store";
 import { AppModal } from "../../../../components/AppModal";
 import { InputFormField } from "../../../../components/Inputs/InputFormField";
-import { CreateCompetition } from "../../../../models/Competition/CreateCompetition";
 
-import regionalCenters from "../../../../const/cities";
-import { FormatIso } from "../../../../utils/dateUtils";
 import { isBadRequestError } from "../../../../utils/checkResponseErrorType";
 import { getValidationErrors } from "../../../../utils/getValidationErrors";
-import { competitionValidationSchema } from "../../utils/competitionValidation";
+import { CreateDivision } from "../../../../models/Division/CreateDivision";
+import { divisionValidationSchema } from "../../utils/divisionValidation";
 import { SelectInput } from "../../../../components/Inputs/SelectInput";
 
-import "./CompetitionModal.scss";
+import "./DivisionModal.scss";
 
 interface Props {
   isEdit?: boolean;
 }
 
-let initialValues: CreateCompetition = {
+let initialValues: CreateDivision = {
   name: "",
-  startDate: "",
-  duration: 1,
-  city: "",
+  minWeight: undefined,
+  maxWeight: undefined,
+  minAge: undefined,
+  maxAge: undefined,
+  sex: "M",
 };
 
-export const CompetitionModal = observer(({ isEdit }: Props) => {
+export const DivisionModal = observer(({ isEdit }: Props) => {
   const navigate = useNavigate();
   const {
-    competitionStore: {
+    divisionStore: {
       selectedForEdit,
-      updateCompetition,
-      createCompetition,
+      updateDivision,
+      createDivision,
       mutationError,
       setMutationError,
       isMutating,
@@ -54,23 +54,20 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
   }
 
   if (isEdit && selectedForEdit) {
-    initialValues = {
-      ...selectedForEdit,
-      startDate: FormatIso(selectedForEdit.startDate),
-    };
+    initialValues = { ...selectedForEdit };
   }
 
   const submitHandler = async (
-    values: CreateCompetition,
-    { setSubmitting }: FormikHelpers<CreateCompetition>
+    values: CreateDivision,
+    { setSubmitting }: FormikHelpers<CreateDivision>
   ) => {
     setMutationError();
 
     let success;
     if (isEdit && selectedForEdit) {
-      success = await updateCompetition(selectedForEdit.id, values);
+      success = await updateDivision(selectedForEdit.id, values);
     } else {
-      success = await createCompetition(values);
+      success = await createDivision(values);
     }
     if (success) {
       navigate(-1);
@@ -84,7 +81,7 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
     <AppModal visible={true} close={() => navigate(-1)}>
       <Formik
         initialValues={initialValues}
-        validationSchema={competitionValidationSchema}
+        validationSchema={divisionValidationSchema}
         onSubmit={submitHandler}
       >
         {({ setErrors }) => {
@@ -93,31 +90,30 @@ export const CompetitionModal = observer(({ isEdit }: Props) => {
           }
           return (
             <Form className="form">
-              <InputFormField
-                label="Competition name"
-                name="name"
-                type="text"
-              />
+              <InputFormField label="Division Name" name="name" type="text" />
               <div className="inputs-group">
                 <InputFormField
-                  label="Start date"
-                  name="startDate"
-                  type="date"
+                  label="Min Weight"
+                  name="minWeight"
+                  type="number"
                 />
                 <InputFormField
-                  label="Duration"
-                  name="duration"
+                  label="Max Weight"
+                  name="maxWeight"
                   type="number"
                 />
               </div>
+              <div className="inputs-group">
+                <InputFormField label="Min Age" name="minAge" type="number" />
+                <InputFormField label="Max Age" name="maxAge" type="number" />
+              </div>
               <SelectInput
-                label="City"
-                name="city"
-                filterable
-                items={regionalCenters.map((city) => ({
-                  label: city,
-                  value: city,
-                }))}
+                label="Sex"
+                name="sex"
+                items={[
+                  { label: "Male", value: "M" },
+                  { label: "Female", value: "F" },
+                ]}
               />
               <Button
                 type="submit"

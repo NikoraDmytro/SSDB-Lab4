@@ -5,7 +5,7 @@ import { SideBar } from "./components/SideBar";
 import { SnackBar } from "./components/SnackBar";
 
 import { Calendar } from "./pages/Calendar";
-import { Placeholder } from "./pages/Placeholder";
+import { DivisionPage } from "./pages/Division";
 import { SportsmanPage } from "./pages/Sportsman";
 
 import "./App.scss";
@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<Navigate to={routes.CALENDAR} />} />
           <Route path={`${routes.CALENDAR}/*`} element={<Calendar />} />
           <Route path={`${routes.SPORTSMAN}/*`} element={<SportsmanPage />} />
-          <Route path={`${routes.DIVISIONS}/*`} element={<Placeholder />} />
+          <Route path={`${routes.DIVISIONS}/*`} element={<DivisionPage />} />
         </Routes>
       </div>
       <SnackBar />
