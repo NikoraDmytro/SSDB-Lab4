@@ -19,7 +19,7 @@ const PagedDataTable = <T extends WithId, P extends T>(
   const { tableData, tableColumns } = props;
 
   const handleChangePage = (_: unknown, newPage: number) => {
-    props.onPageChange(newPage);
+    props.onPageChange(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (

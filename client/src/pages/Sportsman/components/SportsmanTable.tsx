@@ -42,6 +42,7 @@ export const SportsmanTable = observer(() => {
     {
       name: "sex",
       label: "Sex",
+      renderItem: (item) => (item.sex == "M" ? "Male" : "Female"),
     },
     {
       name: "controls",
