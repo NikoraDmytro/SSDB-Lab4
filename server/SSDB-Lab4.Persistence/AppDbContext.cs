@@ -19,6 +19,10 @@ public class AppDbContext: DbContext
     private DbSet<Competition>? Competitions { get; set; }
     private DbSet<Division>? Divisions { get; set; }
     private DbSet<Competitor>? Competitors { get; set; }
+    private DbSet<CompetitorLog>? CompetitorLogs { get; set; }
+    private DbSet<CompetitionCopy>? CompetitionCopies { get; set; }
+    private DbSet<FailedInsertCompetitorLog>? FailedInsertCompetitorLogs { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
