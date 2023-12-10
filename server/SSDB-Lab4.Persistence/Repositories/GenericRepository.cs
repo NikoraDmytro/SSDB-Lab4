@@ -9,12 +9,12 @@ namespace SSDB_Lab4.Persistence.Repositories;
 public abstract class GenericRepository<T>: IGenericRepository<T> 
     where T : BaseEntity
 {
-    private readonly AppDbContext _context;
+    protected readonly AppDbContext Context;
     protected readonly DbSet<T> DbSet;
 
     protected GenericRepository(AppDbContext context)
     {
-        _context = context;
+        Context = context;
         DbSet = context.Set<T>();
     }
 
@@ -45,26 +45,26 @@ public abstract class GenericRepository<T>: IGenericRepository<T>
 
     public virtual async Task AddAsync(T entity)
     {
-        await _context.AddAsync(entity);
+        await Context.AddAsync(entity);
     }
 
     public virtual async Task AddRangeAsync(IEnumerable<T> entities)
     {
-        await _context.AddRangeAsync(entities);
+        await Context.AddRangeAsync(entities);
     }
 
     public virtual void Update(T entity)
     {
-        _context.Update(entity);
+        Context.Update(entity);
     }
 
     public virtual void Delete(T entity)
     {
-        _context.Remove(entity);
+        Context.Remove(entity);
     }
 
     public async Task SaveChangesAsync()
     {
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 }

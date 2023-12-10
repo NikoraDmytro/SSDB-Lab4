@@ -17,7 +17,7 @@ public class SportsmanService: BaseService, ISportsmanService
     }
     
     public async Task<PagedList<SportsmanDto>> GetSportsmenAsync(
-        RequestParameters parameters)
+        SportsmanRequestParameters parameters)
     {
         var sportsmen = await UnitOfWork
             .SportsmanRepository

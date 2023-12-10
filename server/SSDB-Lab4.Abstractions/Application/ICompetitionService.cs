@@ -3,6 +3,7 @@ using SSDB_Lab4.Common.DTOs.Competitors;
 using SSDB_Lab4.Common.DTOs.Division;
 using SSDB_Lab4.Common.DTOs.Sportsman;
 using SSDB_Lab4.Common.RequestFeatures;
+using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Abstractions.Application;
 
@@ -24,4 +25,10 @@ public interface ICompetitionService
     Task<PagedList<SportsmanDto>> GetAvailableSportsmenAsync(
         int id,
         RequestParameters parameters);
+    public Task<CompetitionDto?> GetLargestCompetitionAsync();
+    public Task<string?> GetLargestDivisionAsync(int id);
+    
+    public Task<PagedList<CompetitionCopy>> 
+        GetCompetitionCopiesAsync(
+            RequestParameters parameters);
 }

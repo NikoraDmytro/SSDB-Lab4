@@ -98,5 +98,33 @@ namespace SSDB_Lab4.API.Controllers
 
             return Ok(competitors);
         }
+        
+        [HttpGet(Endpoints.Competitions.GetLargestCompetition)]
+        public async Task<IActionResult> GetLargestCompetitionAsync()
+        {
+            var competition = await _competitionService
+                .GetLargestCompetitionAsync();
+            
+            return Ok(competition);
+        }
+
+        [HttpGet(Endpoints.Competitions.GetLargestDivision)]
+        public async Task<IActionResult> GetLargestDivisionAsync(int id)
+        {
+            var division = await _competitionService
+                .GetLargestDivisionAsync(id);
+
+            return Ok(division);
+        }
+
+        [HttpGet(Endpoints.Competitions.GetCompetitionCopies)]
+        public async Task<IActionResult> GetCompetitionCopiesAsync(
+            [FromQuery] RequestParameters parameters)
+        {
+            var competitionCopies = await _competitionService
+                .GetCompetitionCopiesAsync(parameters);
+
+            return Ok(competitionCopies);
+        }
     }
 }

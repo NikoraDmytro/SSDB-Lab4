@@ -185,4 +185,42 @@ public class CompetitionService: BaseService, ICompetitionService
 
         return sportsmenDto;
     }
+
+    public async Task<CompetitionDto?> GetLargestCompetitionAsync()
+    {
+        var competition = await UnitOfWork
+            .CompetitionRepository
+            .GetLargestCompetitionAsync();
+        
+        var competitionDto = Mapper.Map<CompetitionDto>(competition);
+
+        return competitionDto;
+    }
+
+    public async Task<string?> GetLargestDivisionAsync(int id)
+    {
+        var competition = await UnitOfWork
+            .CompetitionRepository
+            .GetByIdAsync(id);
+
+        if (competition is null)
+        {
+            throw new NotFoundException($"Competition was not found!");
+        }
+
+        return await UnitOfWork
+            .CompetitionRepository
+            .GetLargestDivisionAsync(id);
+    }
+
+    public async Task<PagedList<CompetitionCopy>> 
+        GetCompetitionCopiesAsync(
+            RequestParameters parameters)
+    {
+        var competitionCopies = await UnitOfWork
+            .CompetitionRepository
+            .GetCompetitionCopiesAsync(parameters);
+        
+        return competitionCopies;
+    }
 }

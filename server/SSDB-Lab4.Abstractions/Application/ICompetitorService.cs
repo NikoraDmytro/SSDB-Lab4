@@ -1,5 +1,6 @@
 using SSDB_Lab4.Common.DTOs.Competitors;
 using SSDB_Lab4.Common.RequestFeatures;
+using SSDB_Lab4.Domain.entities;
 
 namespace SSDB_Lab4.Abstractions.Application;
 
@@ -19,4 +20,13 @@ public interface ICompetitorService
     Task UpdateCompetitorAsync(
         int id, 
         UpdateCompetitorWeightDto updateCompetitorWeightDto);
+    public Task<int> CountLessHeavyAsync(double? weight);
+    public Task<PagedList<CompetitorLog>> GetCompetitorLogsAsync(
+        int competitionId,
+        RequestParameters parameters);
+
+    public Task<PagedList<FailedInsertCompetitorLog>>
+        GetFailedInsertCompetitorLogsAsync(
+            int competitionId,
+            RequestParameters parameters);
 }

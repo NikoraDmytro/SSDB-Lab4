@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using SSDB_Lab4.Abstractions.Persistence;
 using SSDB_Lab4.Common.DTOs.Competitors;
 using SSDB_Lab4.Common.DTOs.Division;
+using SSDB_Lab4.Common.RequestFeatures;
 using SSDB_Lab4.Domain.entities;
+using SSDB_Lab4.Persistence.Extensions;
 
 namespace SSDB_Lab4.Persistence.Repositories;
 
@@ -12,7 +14,18 @@ public class CompetitionRepository
     public CompetitionRepository(AppDbContext context) : base(context)
     {
     }
-    
+
+    public override async Task AddAsync(Competition competition)
+    {
+        await Context.Database.ExecuteSqlInterpolatedAsync(
+            @$"usp_insert_competitions 
+            @name = {competition.Name}, 
+            @start_date = {competition.StartDate}, 
+            @duration = {competition.Duration}, 
+            @city = {competition.City}"
+        );
+    }
+
     public async Task<IEnumerable<Competition>> GetOverlapping(string name, DateTime startDate)
     {
         return await DbSet
@@ -62,5 +75,33 @@ public class CompetitionRepository
             .ToListAsync();
 
         return competitors;
+    }
+
+    public async Task<Competition?> GetLargestCompetitionAsync()
+    {
+        return await DbSet
+            .Select(c => c)
+            .Where(c => 
+                c.Id == Context.GetLargestCompetition())
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetLargestDivisionAsync(int id)
+    {
+        return await DbSet
+            .Select(d => 
+                Context.GetLargestDivisionName(id))
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<PagedList<CompetitionCopy>> 
+        GetCompetitionCopiesAsync(
+            RequestParameters parameters)
+    {
+        return await Context.Set<CompetitionCopy>()
+            .OrderBy(c => c.Id)
+            .ToPagedListAsync(
+                parameters.PageNumber, 
+                parameters.PageSize);
     }
 }

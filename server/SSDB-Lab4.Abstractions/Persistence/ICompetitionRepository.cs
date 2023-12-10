@@ -15,4 +15,12 @@ public interface ICompetitionRepository: IGenericRepository<Competition>
     public Task<IEnumerable<DivisionCompetitorDto>> GetDivisionCompetitorsAsync(
         int competitionId,
         int divisionId);
+
+    public Task<Competition?> GetLargestCompetitionAsync();
+    
+    public Task<string?> GetLargestDivisionAsync(int id);
+    
+    public Task<PagedList<CompetitionCopy>> 
+        GetCompetitionCopiesAsync(
+            RequestParameters parameters);
 }

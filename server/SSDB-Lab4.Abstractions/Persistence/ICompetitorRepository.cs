@@ -17,4 +17,20 @@ public interface ICompetitorRepository: IGenericRepository<Competitor>
     public Task<IEnumerable<Competitor>> GetBySportsmenIdsAsync(
         int competitionId,
         IEnumerable<int> ids);
+
+    public Task WeightCompetitorAsync(
+        int competitorId,
+        double weight);
+
+    public Task<int> CountLessHeavyAsync(double? weight);
+
+    public Task<PagedList<CompetitorLog>> 
+        GetCompetitorLogsAsync(
+            int competitionId,
+            RequestParameters parameters);
+
+    public Task<PagedList<FailedInsertCompetitorLog>>
+        GetFailedInsertCompetitorLogsAsync(
+            int competitionId,
+            RequestParameters parameters);
 }

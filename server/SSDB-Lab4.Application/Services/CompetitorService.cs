@@ -143,12 +143,45 @@ namespace SSDB_Lab4.Application.Services
             int id, 
             UpdateCompetitorWeightDto updateCompetitorWeightDto)
         {
-            var competitor = await FindCompetitorAsync(id);
+            await UnitOfWork
+                .CompetitorRepository
+                .WeightCompetitorAsync(
+                    id, 
+                    updateCompetitorWeightDto.WeightingResult ?? 0
+                    );
+        }
 
-            competitor.WeightingResult = updateCompetitorWeightDto.WeightingResult;
-            
-            UnitOfWork.CompetitorRepository.Update(competitor);
-            await UnitOfWork.SaveAsync();
+        public async Task<int> CountLessHeavyAsync(double? weight)
+        {
+            return await UnitOfWork
+                .CompetitorRepository
+                .CountLessHeavyAsync(weight);
+        }
+
+        public async Task<PagedList<CompetitorLog>> 
+            GetCompetitorLogsAsync(
+                int competitionId,
+                RequestParameters parameters)
+        {
+            var competitorLogs = await UnitOfWork
+                .CompetitorRepository
+                .GetCompetitorLogsAsync(competitionId, parameters);
+
+            return competitorLogs;
+        }
+
+        public async Task<PagedList<FailedInsertCompetitorLog>> 
+            GetFailedInsertCompetitorLogsAsync(
+                int competitionId,
+                RequestParameters parameters)
+        { 
+            var failedInsertCompetitorLogs = await UnitOfWork
+                .CompetitorRepository
+                .GetFailedInsertCompetitorLogsAsync(
+                    competitionId,
+                    parameters);
+
+            return failedInsertCompetitorLogs;
         }
     }
 }

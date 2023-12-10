@@ -37,6 +37,16 @@ namespace SSDB_Lab4.API.Controllers
             return Ok(competitor);
         }
 
+        [HttpGet("/api/competitors/weightStatistics")]
+        public async Task<IActionResult> GetWeightStatistics(
+            [FromBody] CompetitorWeightDto competitorWeightDto)
+        {
+            var count = await _competitorService
+                .CountLessHeavyAsync(competitorWeightDto.Weight);
+
+            return Ok(count);
+        }
+
         [ValidateModel]
         [HttpPost(Endpoints.Competitors.Create)]
         public async Task<IActionResult> Create(
@@ -81,6 +91,29 @@ namespace SSDB_Lab4.API.Controllers
             await _competitorService.DeleteCompetitorAsync(id);
 
             return NoContent();
+        }
+        
+        [HttpGet(Endpoints.Competitors.GetLogs)]
+        public async Task<IActionResult> GetLogs(
+            [FromRoute] int competitionId,
+            [FromQuery] RequestParameters parameters)
+        {
+            var competitorLogs = await _competitorService
+                .GetCompetitorLogsAsync(competitionId, parameters);
+
+            return Ok(competitorLogs);
+        }
+        
+        [HttpGet(Endpoints.Competitors.GetFailedInsertLogs)]
+        public async Task<IActionResult> GetFailedInsertLogs(
+            [FromRoute] int competitionId,
+            [FromQuery] RequestParameters parameters)
+        {
+            var failedInsertCompetitorLogs = await _competitorService
+                .GetFailedInsertCompetitorLogsAsync(
+                    competitionId, parameters);
+
+            return Ok(failedInsertCompetitorLogs);
         }
     }
 }

@@ -25,6 +25,12 @@ public class Endpoints
         public const string GetDivisions = $"{Base}/{{id}}/divisions";
         public const string GetDivisionCompetitors = 
             $"{Base}/{{id}}/divisions/{{divisionId}}";
+        public const string GetLargestCompetition =
+            $"{Base}/largest";
+        public const string GetLargestDivision =
+            $"{Base}/{{id}}/divisions/largest";
+        public const string GetCompetitionCopies =
+            $"{Base}/copies";
     }
     
     public static class Divisions
@@ -46,5 +52,8 @@ public class Endpoints
         public const string SetWeight = $"{Base}/{{id}}/weight";
         public const string SetLapNum = $"{Base}/{{id}}/lap"; 
         public const string Delete = $"{Base}/{{id}}";
+        public const string GetLogs = $"{Base}/logs";
+        public const string GetFailedInsertLogs =
+            $"{Base}/failed";
     }
 }

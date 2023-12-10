@@ -20,7 +20,7 @@ public class SportsmenController: ControllerBase
 
     [HttpGet(Endpoints.Sportsmen.GetAll)]
     public async Task<IActionResult> GetAll(
-        [FromQuery] RequestParameters parameters)
+        [FromQuery] SportsmanRequestParameters parameters)
     {
         var sportsmen = await _sportsmanService
             .GetSportsmenAsync(parameters);

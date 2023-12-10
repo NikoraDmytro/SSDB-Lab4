@@ -6,7 +6,7 @@ namespace SSDB_Lab4.Abstractions.Application;
 public interface ISportsmanService
 {
     Task<PagedList<SportsmanDto>> GetSportsmenAsync(
-        RequestParameters parameters);
+        SportsmanRequestParameters parameters);
     Task<SportsmanDto?> GetSportsmanByIdAsync(int id);
     Task<SportsmanDto> CreateSportsmanAsync(
         CreateSportsmanDto createSportsmanDto);

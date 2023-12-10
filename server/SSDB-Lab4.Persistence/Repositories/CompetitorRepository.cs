@@ -43,4 +43,57 @@ public class CompetitorRepository
             .Where(c => ids.Contains(c.SportsmanId))
             .ToListAsync();
     }
+
+    public async Task WeightCompetitorAsync(
+        int competitorId,
+        double weight)
+    {
+        await Context.Database.ExecuteSqlInterpolatedAsync(
+            $"usp_weight_competitor {competitorId}, {weight}"
+        );
+    }
+    
+    public async Task<int> CountLessHeavyAsync(double? weight)
+    {
+        if (weight == null)
+        {
+            return await DbSet
+                .Select(c => 
+                    Context.CountLessThanAverageWeight())
+                .FirstOrDefaultAsync();
+        }
+
+        return await DbSet
+            .Select(c =>
+                Context.CountLessHeavy((double) weight))
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<PagedList<CompetitorLog>> 
+        GetCompetitorLogsAsync(
+            int competitionId, 
+            RequestParameters parameters)
+    {
+        return await Context.Set<CompetitorLog>()
+            .Where(c => 
+                c.Competitor!.CompetitionId == competitionId)
+            .OrderBy(c => c.Id)
+            .ToPagedListAsync(
+                parameters.PageNumber, 
+                parameters.PageSize);
+    }
+
+    public async Task<PagedList<FailedInsertCompetitorLog>> 
+        GetFailedInsertCompetitorLogsAsync(
+            int competitionId, 
+            RequestParameters parameters)
+    {
+        return await Context.Set<FailedInsertCompetitorLog>()
+            .Where(c => 
+                c.CompetitionId == competitionId)
+            .OrderBy(c => c.Id)
+            .ToPagedListAsync(
+                parameters.PageNumber, 
+                parameters.PageSize);
+    }
 }
