@@ -9,7 +9,12 @@ public class CompetitorEntityConfiguration
 {
     public void Configure(EntityTypeBuilder<Competitor> builder)
     {
-        builder.ToTable("competitors");
+        builder.ToTable("competitors",
+            tb =>
+            {
+                tb.HasTrigger("competitorsLogging");
+                tb.HasTrigger("registerCompetitorTrigger");
+            });
         
         builder.HasKey(c => c.Id);
 

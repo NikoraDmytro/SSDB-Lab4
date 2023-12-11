@@ -8,6 +8,7 @@ import { WithId, TableColumns } from "../../types/DataTableTypes";
 
 interface PagedTableProps<T extends WithId, P extends T> {
   tableData: Paged<T>;
+  onClick?: (item: T) => void;
   tableColumns: TableColumns<T, P>[];
   onPageChange: (page: number) => void;
   onChangePageSize: (pageSize: number) => void;
@@ -16,7 +17,7 @@ interface PagedTableProps<T extends WithId, P extends T> {
 const PagedDataTable = <T extends WithId, P extends T>(
   props: PagedTableProps<T, P>
 ) => {
-  const { tableData, tableColumns } = props;
+  const { tableData, tableColumns, onClick } = props;
 
   const handleChangePage = (_: unknown, newPage: number) => {
     props.onPageChange(newPage + 1);
@@ -31,7 +32,11 @@ const PagedDataTable = <T extends WithId, P extends T>(
 
   return (
     <>
-      <DataTable tableData={tableData.items} tableColumns={tableColumns} />
+      <DataTable
+        onClick={onClick}
+        tableData={tableData.items}
+        tableColumns={tableColumns}
+      />
       <TablePagination
         rowsPerPageOptions={[10, 15, 20]}
         component="div"

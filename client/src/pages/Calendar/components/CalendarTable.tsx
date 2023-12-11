@@ -19,6 +19,7 @@ export const CalendarTable = observer(() => {
     competitionStore: {
       total,
       pageSize,
+      selected,
       isLoading,
       currentPage,
       setPageSize,
@@ -26,8 +27,19 @@ export const CalendarTable = observer(() => {
       setCurrentPage,
       selectForDelete,
       selectForEdit,
+      setSelected,
+      fetchLargestCompetition,
     },
   } = useRootStoreContext();
+
+  const handleRowClick = (item: Competition) => {
+    setSelected(item);
+    navigate(`${item.id}`);
+  };
+
+  const selectLargestCompetition = async () => {
+    await fetchLargestCompetition().then(() => navigate(`${selected?.id}`));
+  };
 
   const columns: TableColumns<Competition, ColumnType>[] = [
     {
@@ -76,6 +88,14 @@ export const CalendarTable = observer(() => {
     <div className="calendar-wrapper">
       <div className="calendar-menu">
         <Button
+          variant="text"
+          color="inherit"
+          onClick={selectLargestCompetition}
+        >
+          Select largest competition
+        </Button>
+
+        <Button
           className="add-button"
           variant="contained"
           color="inherit"
@@ -94,6 +114,7 @@ export const CalendarTable = observer(() => {
             items: competitions,
             currentPage: currentPage - 1,
           }}
+          onClick={handleRowClick}
           tableColumns={columns}
           onChangePageSize={setPageSize}
           onPageChange={setCurrentPage}

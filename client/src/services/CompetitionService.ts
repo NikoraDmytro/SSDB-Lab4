@@ -13,6 +13,14 @@ const CompetitionService = {
     return await http.get(BASE_URL, { params: params });
   },
 
+  getCompetition: async (id: number): Promise<Competition> => {
+    return await http.get(BASE_URL + id);
+  },
+
+  getLargestCompetition: async (): Promise<Competition> => {
+    return await http.get(BASE_URL + "largest");
+  },
+
   createCompetition: async (competition: CreateCompetition) => {
     return await http.post(BASE_URL, competition);
   },

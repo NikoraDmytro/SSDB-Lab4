@@ -20,6 +20,7 @@ class CompetitionStore {
 
   mutationError?: ResponseError;
 
+  selected?: Competition;
   selectedForEdit?: Competition;
   selectedForDelete?: Competition;
 
@@ -52,6 +53,10 @@ class CompetitionStore {
     this.competitions = competitions;
   };
 
+  setSelected = (competition: Competition) => {
+    this.selected = competition;
+  };
+
   selectForDelete = (competition: Competition) => {
     this.selectedForDelete = competition;
   };
@@ -77,6 +82,40 @@ class CompetitionStore {
       this.setPageSize(result.pageSize);
       this.setCurrentPage(result.currentPage);
       this.setTotal(result.totalCount);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        this.rootStore.snackBarStore.showSnackBar(
+          error.response?.data.title,
+          "error"
+        );
+      }
+    } finally {
+      this.setLoading(false);
+    }
+  };
+
+  fetchCompetitionDetails = async (id: number) => {
+    try {
+      this.setLoading(true);
+      const result = await CompetitionService.getCompetition(id);
+      this.setSelected(result);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        this.rootStore.snackBarStore.showSnackBar(
+          error.response?.data.title,
+          "error"
+        );
+      }
+    } finally {
+      this.setLoading(false);
+    }
+  };
+
+  fetchLargestCompetition = async () => {
+    try {
+      this.setLoading(true);
+      const result = await CompetitionService.getLargestCompetition();
+      this.setSelected(result);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         this.rootStore.snackBarStore.showSnackBar(
