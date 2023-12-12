@@ -18,7 +18,6 @@ public class SportsmanRepository
     {
         IQueryable<Sportsman> query;
         
-        Console.WriteLine(parameters.MinCompetitionCount);
         if (parameters.MinCompetitionCount != null)
         {
             query = Context

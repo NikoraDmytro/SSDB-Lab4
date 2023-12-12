@@ -13,11 +13,11 @@ import "./Calendar.scss";
 
 export const Calendar = observer(() => {
   const {
-    competitionStore: { fetchCompetitions, pageSize, currentPage },
+    competitionStore: { fetchPagedData, pageSize, currentPage },
   } = useRootStoreContext();
 
   useEffect(() => {
-    fetchCompetitions();
+    fetchPagedData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSize, currentPage]);
 

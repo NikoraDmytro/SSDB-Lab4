@@ -11,11 +11,11 @@ import "./SportsmanPage.scss";
 
 export const SportsmanPage = observer(() => {
   const {
-    sportsmanStore: { fetchSportsmen, pageSize, currentPage },
+    sportsmanStore: { fetchPagedData, pageSize, currentPage },
   } = useRootStoreContext();
 
   useEffect(() => {
-    fetchSportsmen();
+    fetchPagedData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSize, currentPage]);
 

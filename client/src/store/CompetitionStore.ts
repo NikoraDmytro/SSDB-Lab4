@@ -1,21 +1,18 @@
 import RootStore from ".";
 import axios from "axios";
-import { makeAutoObservable } from "mobx";
+import { makeObservable, action, observable } from "mobx";
 
+import BaseStore from "./BaseStore";
 import { Competition } from "../models/Competition/Competition";
 import CompetitionService from "../services/CompetitionService";
 import { CreateCompetition } from "../models/Competition/CreateCompetition";
 import { ResponseError } from "../types/AxiosErrorTypes";
+import { RequestParameters } from "../types/RequestParameters";
+import { Paged } from "../types/Paged";
 
-class CompetitionStore {
-  rootStore: RootStore;
-
-  total: number = 0;
-  pageSize: number = 10;
-  currentPage: number = 1;
+class CompetitionStore extends BaseStore<Competition> {
   competitions: Competition[] = [];
 
-  isLoading: boolean = false;
   isMutating: boolean = false;
 
   mutationError?: ResponseError;
@@ -25,32 +22,23 @@ class CompetitionStore {
   selectedForDelete?: Competition;
 
   constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    makeAutoObservable(this);
+    super(rootStore);
+    makeObservable(this, {
+      competitions: observable,
+      isMutating: observable,
+      mutationError: observable,
+      selectedForEdit: observable,
+      selectedForDelete: observable,
+      selectForEdit: action,
+      setMutationError: action,
+      createCompetition: action,
+      updateCompetition: action,
+      deleteCompetition: action,
+    });
   }
-
-  setTotal = (total: number) => {
-    this.total = total;
-  };
-
-  setCurrentPage = (page: number) => {
-    this.currentPage = page;
-  };
-
-  setPageSize = (size: number) => {
-    this.pageSize = size;
-  };
-
-  setLoading = (loading: boolean) => {
-    this.isLoading = loading;
-  };
 
   setMutating = (mutating: boolean) => {
     this.isMutating = mutating;
-  };
-
-  setCompetitions = (competitions: Competition[]) => {
-    this.competitions = competitions;
   };
 
   setSelected = (competition: Competition) => {
@@ -69,30 +57,13 @@ class CompetitionStore {
     this.mutationError = error;
   };
 
-  fetchCompetitions = async () => {
-    try {
-      this.setLoading(true);
+  setPagedData(competitions: Competition[]): void {
+    this.competitions = competitions;
+  }
 
-      const result = await CompetitionService.getAllCompetitions({
-        pageSize: this.pageSize,
-        pageNumber: this.currentPage,
-      });
-
-      this.setCompetitions(result.items);
-      this.setPageSize(result.pageSize);
-      this.setCurrentPage(result.currentPage);
-      this.setTotal(result.totalCount);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        this.rootStore.snackBarStore.showSnackBar(
-          error.response?.data.title,
-          "error"
-        );
-      }
-    } finally {
-      this.setLoading(false);
-    }
-  };
+  async getPagedData(params: RequestParameters): Promise<Paged<Competition>> {
+    return await CompetitionService.getAllCompetitions(params);
+  }
 
   fetchCompetitionDetails = async (id: number) => {
     try {
@@ -132,7 +103,7 @@ class CompetitionStore {
     try {
       this.setMutating(true);
       await CompetitionService.createCompetition(competition);
-      this.fetchCompetitions();
+      this.fetchPagedData();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status == 400 || error.response?.status == 400) {
@@ -155,7 +126,7 @@ class CompetitionStore {
     try {
       this.setMutating(true);
       await CompetitionService.updateCompetition(id, competition);
-      this.fetchCompetitions();
+      this.fetchPagedData();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status == 400 || error.response?.status == 400) {
@@ -178,7 +149,7 @@ class CompetitionStore {
     try {
       this.setLoading(true);
       await CompetitionService.deleteCompetition(id);
-      this.fetchCompetitions();
+      this.fetchPagedData();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         this.rootStore.snackBarStore.showSnackBar(
