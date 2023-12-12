@@ -3,6 +3,7 @@ import { Paged } from "../types/Paged";
 import { Competition } from "../models/Competition/Competition";
 import { RequestParameters } from "../types/RequestParameters";
 import { CreateCompetition } from "../models/Competition/CreateCompetition";
+import { Sportsman } from "../models/Sportsman/Sportsman";
 
 const BASE_URL = "competitions/";
 
@@ -15,6 +16,13 @@ const CompetitionService = {
 
   getCompetition: async (id: number): Promise<Competition> => {
     return await http.get(BASE_URL + id);
+  },
+
+  getAvailableSportsmen: async (
+    id: number,
+    params: RequestParameters
+  ): Promise<Paged<Sportsman>> => {
+    return await http.get(BASE_URL + id + "/sportsmen", { params: params });
   },
 
   getLargestCompetition: async (): Promise<Competition> => {

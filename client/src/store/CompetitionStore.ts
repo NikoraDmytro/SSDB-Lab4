@@ -9,6 +9,7 @@ import { CreateCompetition } from "../models/Competition/CreateCompetition";
 import { ResponseError } from "../types/AxiosErrorTypes";
 import { RequestParameters } from "../types/RequestParameters";
 import { Paged } from "../types/Paged";
+import { Sportsman } from "../models/Sportsman/Sportsman";
 
 class CompetitionStore extends BaseStore<Competition> {
   competitions: Competition[] = [];
@@ -21,21 +22,34 @@ class CompetitionStore extends BaseStore<Competition> {
   selectedForEdit?: Competition;
   selectedForDelete?: Competition;
 
+  selectedSportsmenIds: number[] = [];
+  availableSportsmen: Sportsman[] = [];
+  isLoadingSportsmen: boolean = false;
+
   constructor(rootStore: RootStore) {
     super(rootStore);
     makeObservable(this, {
+      selectedSportsmenIds: observable,
+      availableSportsmen: observable,
+      isLoadingSportsmen: observable,
       competitions: observable,
       isMutating: observable,
       mutationError: observable,
       selected: observable,
       selectedForEdit: observable,
       selectedForDelete: observable,
+      fetchCompetitionDetails: action,
+      fetchLargestCompetition: action,
+      selectSportsmen: action,
       selectForEdit: action,
       setSelected: action,
+      clearSelected: action,
       setMutationError: action,
       createCompetition: action,
       updateCompetition: action,
       deleteCompetition: action,
+      setAvailableSportsmen: action,
+      fetchAvailableSportsmen: action,
     });
   }
 
@@ -57,6 +71,28 @@ class CompetitionStore extends BaseStore<Competition> {
 
   setMutationError = (error?: ResponseError) => {
     this.mutationError = error;
+  };
+
+  setLoadingSportsmen = (loading: boolean) => {
+    this.isLoadingSportsmen = loading;
+  };
+
+  setAvailableSportsmen = (sportsmen: Sportsman[]) => {
+    this.availableSportsmen = sportsmen;
+  };
+
+  selectSportsmen = (sportsmanId: number) => {
+    if (this.selectedSportsmenIds.includes(sportsmanId)) {
+      this.selectedSportsmenIds = this.selectedSportsmenIds.filter(
+        (id) => id != sportsmanId
+      );
+    } else {
+      this.selectedSportsmenIds = [...this.selectedSportsmenIds, sportsmanId];
+    }
+  };
+
+  clearSelected = () => {
+    this.selectedSportsmenIds = [];
   };
 
   setPagedData(competitions: Competition[]): void {
@@ -81,6 +117,31 @@ class CompetitionStore extends BaseStore<Competition> {
       }
     } finally {
       this.setLoading(false);
+    }
+  };
+
+  fetchAvailableSportsmen = async (id: number) => {
+    try {
+      this.setLoadingSportsmen(true);
+
+      const result = await CompetitionService.getAvailableSportsmen(id, {
+        pageNumber: this.currentPage,
+        pageSize: this.pageSize,
+      });
+
+      this.setAvailableSportsmen(result.items);
+      this.setPageSize(result.pageSize || 10);
+      this.setCurrentPage(result.currentPage || 1);
+      this.setTotal(result.totalCount);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        this.rootStore.snackBarStore.showSnackBar(
+          error.response?.data.title,
+          "error"
+        );
+      }
+    } finally {
+      this.setLoadingSportsmen(false);
     }
   };
 

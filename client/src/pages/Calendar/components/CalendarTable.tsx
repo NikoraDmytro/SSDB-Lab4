@@ -66,7 +66,8 @@ export const CalendarTable = observer(() => {
           <img
             src={editIcon}
             alt="Edit"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               selectForEdit(item);
               navigate("edit");
             }}
@@ -74,7 +75,8 @@ export const CalendarTable = observer(() => {
           <img
             src={deleteIcon}
             alt="Delete"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               selectForDelete(item);
               navigate("confirm");
             }}

@@ -100,12 +100,25 @@ namespace SSDB_Lab4.Application.Services
             int competitionId,
             IEnumerable<CreateCompetitorDto> createCompetitorDtos)
         {
+            var competition = await UnitOfWork
+                .CompetitionRepository
+                .GetByIdAsync(competitionId);
+
+            if (competition is null)
+            {
+                throw new NotFoundException($"Competition was not found!");
+            }
+            if ((competition.StartDate - DateTime.Today).TotalDays < 1)
+            {   
+                throw new BadRequestException($"Can not add new competitors after competition start!");
+            }
+            
             var sportsmanIds = createCompetitorDtos
                 .Select(c => c.SportsmanId ?? 0)
                 .ToArray();
             await ThrowIfDuplicate(competitionId, sportsmanIds);
             await ThrowIfNotFound(sportsmanIds);
-
+            
             var competitors = Mapper
                 .Map<IEnumerable<Competitor>>(createCompetitorDtos)
                 .ToArray();

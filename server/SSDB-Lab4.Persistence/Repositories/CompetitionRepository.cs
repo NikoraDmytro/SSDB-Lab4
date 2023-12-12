@@ -26,11 +26,12 @@ public class CompetitionRepository
         );
     }
 
-    public async Task<IEnumerable<Competition>> GetOverlapping(string name, DateTime startDate)
+    public async Task<IEnumerable<Competition>> GetOverlapping(int id, string name, DateTime startDate)
     {
         return await DbSet
             .Where(c => c.Name == name)
             .Where(c => EF.Functions.DateDiffDay(c.StartDate, startDate) < 30)
+            .Where(c => c.Id != id)
             .ToListAsync();
     }
 

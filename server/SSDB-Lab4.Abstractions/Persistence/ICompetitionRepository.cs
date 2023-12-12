@@ -7,7 +7,7 @@ namespace SSDB_Lab4.Abstractions.Persistence;
 
 public interface ICompetitionRepository: IGenericRepository<Competition>
 {
-    Task<IEnumerable<Competition>> GetOverlapping(string name, DateTime startDate);
+    Task<IEnumerable<Competition>> GetOverlapping(int id, string name, DateTime startDate);
 
     public Task<IEnumerable<CompetitionDivisionDto>> GetDivisionsAsync(
         int competitionId);

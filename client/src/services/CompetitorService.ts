@@ -1,25 +1,11 @@
-/* 
-public const string Base = "/api/Competitors/{CompetitorId}/competitors";
-public const string GetAll = Base;
-public const string GetById = $"{Base}/{{id}}";
-public const string Create = Base;
-public const string SetWeight = $"{Base}/{{id}}/weight";
-public const string SetLapNum = $"{Base}/{{id}}/lap"; 
-public const string Delete = $"{Base}/{{id}}";
-public const string GetLogs = $"{Base}/logs";
-public const string GetFailedInsertLogs =
-    $"{Base}/failed"; 
-    */
-
 import http from "./index";
 import { Paged } from "../types/Paged";
 import { Competitor } from "../models/Competitor/Competitor";
 import { RequestParameters } from "../types/RequestParameters";
-
-const BASE_URL = "competitions/";
+import { UpdateCompetitorWeight } from "../models/Competitor/UpdateCompetitorWeight";
 
 const getBaseUrl = (competitionId: number) => {
-  return BASE_URL + competitionId + "/competitors";
+  return "competitions/" + competitionId + "/competitors/";
 };
 
 const CompetitorService = {
@@ -35,6 +21,26 @@ const CompetitorService = {
     id: number
   ): Promise<Competitor> => {
     return await http.get(getBaseUrl(competitionId) + id);
+  },
+
+  createCompetitors: async (competitionId: number, sportsmanIds: number[]) => {
+    return await http.post(
+      getBaseUrl(competitionId),
+      sportsmanIds.map((id) => ({
+        sportsmanId: id,
+      }))
+    );
+  },
+
+  updateWeight: async (
+    competitionId: number,
+    id: number,
+    updateWeight: UpdateCompetitorWeight
+  ) => {
+    return await http.put(
+      getBaseUrl(competitionId) + id + "/weight",
+      updateWeight
+    );
   },
 
   deleteCompetitor: async (competitionId: number, id: number) => {

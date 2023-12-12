@@ -42,13 +42,13 @@ namespace SSDB_Lab4.Application.Services
             return divisionDto;
         }
 
-        private async Task ThrowIfDuplicate(String name)
+        private async Task ThrowIfDuplicate(int id, String name)
         {
             var duplicate = await UnitOfWork
                 .DivisionRepository
                 .GetByNameAsync(name);
 
-            if (duplicate != null)
+            if (duplicate != null && duplicate.Id != id)
             {
                 throw new BadRequestException($"Division with name {name} already exists");
             }
@@ -56,7 +56,7 @@ namespace SSDB_Lab4.Application.Services
 
         public async Task<DivisionDto> CreateDivisionAsync(CreateDivisionDto createDivisionDto)
         {
-            await ThrowIfDuplicate(createDivisionDto.Name!);
+            await ThrowIfDuplicate(-1, createDivisionDto.Name!);
             
             var division = Mapper.Map<Division>(createDivisionDto);
 
@@ -71,7 +71,7 @@ namespace SSDB_Lab4.Application.Services
 
         public async Task UpdateDivisionAsync(int id, UpdateDivisionDto updateDivisionDto)
         {
-            await ThrowIfDuplicate(updateDivisionDto.Name!);
+            await ThrowIfDuplicate(id, updateDivisionDto.Name!);
             
             var division = await UnitOfWork
                 .DivisionRepository

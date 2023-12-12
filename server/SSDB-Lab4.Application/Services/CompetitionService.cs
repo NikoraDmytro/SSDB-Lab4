@@ -18,11 +18,11 @@ public class CompetitionService: BaseService, ICompetitionService
     {
     }
 
-    private async Task ThrowIfOverlapsAsync(String name, DateTime startDate)
+    private async Task ThrowIfOverlapsAsync(int id, String name, DateTime startDate)
     {
         var overlappingCompetitions = await UnitOfWork
             .CompetitionRepository
-            .GetOverlapping(name, startDate);
+            .GetOverlapping(id, name, startDate);
         var overlappingCompetitionsArr = overlappingCompetitions
             .ToArray();
 
@@ -64,6 +64,7 @@ public class CompetitionService: BaseService, ICompetitionService
     public async Task<CompetitionDto> CreateCompetitionAsync(CreateCompetitionDto createCompetitionDto)
     {
         await ThrowIfOverlapsAsync(
+            -1,
             createCompetitionDto.Name!, 
             DateTime.Parse(createCompetitionDto.StartDate!));
         
@@ -80,6 +81,7 @@ public class CompetitionService: BaseService, ICompetitionService
     public async Task UpdateCompetitionAsync(int id, UpdateCompetitionDto updateCompetitionDto)
     {
         await ThrowIfOverlapsAsync(
+            id,
             updateCompetitionDto.Name!, 
             DateTime.Parse(updateCompetitionDto.StartDate!));
         

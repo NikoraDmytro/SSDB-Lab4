@@ -3,6 +3,9 @@ import { useRootStoreContext } from "../../../../store";
 import { Route, Routes } from "react-router-dom";
 import { CompetitorsTable } from "./CompetitorsTable";
 import { observer } from "mobx-react";
+import { RegisterSportsmen } from "../RegisterSportsmen";
+import { WeightModal } from "../../components/WeightModal";
+import { DeleteCompetitorDialog } from "../../components/DeleteCompetitorDialog";
 
 const CompetitorsPage = observer(() => {
   const {
@@ -17,10 +20,10 @@ const CompetitorsPage = observer(() => {
   return (
     <Routes>
       <Route path="/" element={<CompetitorsTable />}>
-        {/* <Route path="confirm" element={<DeleteCompetitionDialog />} />
-        <Route path="add" element={<CompetitionModal />} />
-        <Route path="edit" element={<CompetitionModal isEdit />} /> */}
+        <Route path="confirm" element={<DeleteCompetitorDialog />} />
+        <Route path="edit" element={<WeightModal />} />
       </Route>
+      <Route path="add" element={<RegisterSportsmen />} />
     </Routes>
   );
 });

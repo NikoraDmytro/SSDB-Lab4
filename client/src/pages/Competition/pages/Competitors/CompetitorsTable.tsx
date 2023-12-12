@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import scalesIcon from "../../../../assets/icons/scalesIcon.svg";
 import personRemoveIcon from "../../../../assets/icons/personRemoveIcon.svg";
@@ -21,6 +21,7 @@ export const CompetitorsTable = observer(() => {
       setPageSize,
       setCurrentPage,
       selectForDelete,
+      selectForEdit,
       total,
       pageSize,
       currentPage,
@@ -64,10 +65,10 @@ export const CompetitorsTable = observer(() => {
           <img
             src={scalesIcon}
             alt="Set weight"
-            /* onClick={() => {
-              selectForDelete(item);
-              navigate("confirm");
-            }} */
+            onClick={() => {
+              selectForEdit(item);
+              navigate("edit");
+            }}
           />
         </div>
       ),
@@ -76,7 +77,12 @@ export const CompetitorsTable = observer(() => {
   return (
     <div>
       <div className="competitors-menu">
-        <Button className="add-button" variant="contained" color="inherit">
+        <Button
+          className="add-button"
+          variant="contained"
+          color="inherit"
+          onClick={() => navigate("add")}
+        >
           Зареєструвати
         </Button>
       </div>
@@ -92,6 +98,8 @@ export const CompetitorsTable = observer(() => {
         onChangePageSize={setPageSize}
         onPageChange={setCurrentPage}
       />
+
+      <Outlet />
     </div>
   );
 });
