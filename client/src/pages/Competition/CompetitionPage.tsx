@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 
 import { useRootStoreContext } from "../../store";
+import { CompetitorsPage } from "./pages/Competitors";
 import { NavTabs } from "../../components/NavTabs/NavTabs";
 
 import "./Competition.scss";
@@ -46,8 +47,8 @@ const CompetitionPage = observer(() => {
 
       <Routes>
         <Route path="" element={<Navigate to="competitors" replace />} />
-        <Route path="competitors" element={<h1>Competitors</h1>} />
-        <Route path="divisions" element={<h1>Divisions</h1>} />
+        <Route path="competitors/*" element={<CompetitorsPage />} />
+        <Route path="divisions/*" element={<h1>Divisions</h1>} />
       </Routes>
     </div>
   );

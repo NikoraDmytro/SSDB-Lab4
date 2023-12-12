@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin: 15px;
   overflow: auto;
 
   .competition-name {
@@ -15,10 +14,29 @@
 
   .competitors-menu {
     display: flex;
-    justify-content: space-around;
+    margin-bottom: 15px;
     align-items: center;
-    div {
-      width: 200px;
+    justify-content: flex-end;
+  }
+
+  .add-button {
+    width: 250px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 4px;
+    color: #000000de;
+    background-color: #e0e0e0;
+    box-shadow: 0 3 1 -2 #00000033, 0 2 2 0 #00000024, 0 1 5 0 #0000001f;
+  }
+
+  .control-buttons {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    > img {
+      cursor: pointer;
     }
   }
 }
@@ -28,6 +46,7 @@
   justify-content: space-around;
   margin: 15px 5px;
   align-items: center;
+
   .groups-filters {
     display: flex;
     flex-direction: column;

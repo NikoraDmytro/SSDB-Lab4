@@ -62,8 +62,8 @@ abstract class BaseStore<T> {
       });
       this.setPagedData(result.items);
 
-      this.setPageSize(result.pageSize);
-      this.setCurrentPage(result.currentPage);
+      this.setPageSize(result.pageSize || 10);
+      this.setCurrentPage(result.currentPage || 1);
       this.setTotal(result.totalCount);
     } catch (error) {
       if (axios.isAxiosError(error)) {
